@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
-		//autoChooser.addObject("Name of Autonomous", new object);
+		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 		
 		SmartDashboard.putData("Auto Mode", autoChooser);
 		

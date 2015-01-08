@@ -1,6 +1,7 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
 import org.usfirst.frc.team321.robot.RobotMap;
+import org.usfirst.frc.team321.robot.commands.MoveWithAngle;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -36,6 +37,7 @@ public class DriveTrain extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
+    	setDefaultCommand(new MoveWithAngle());
     }
 
 	public void angleToDriveMechanum(double axisNorm, double angVel, double angle) {
