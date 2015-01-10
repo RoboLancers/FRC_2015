@@ -12,8 +12,8 @@ public class OI {
 	public static JoystickButton[] driveBtn, maniBtn;
 	
 	public OI(){
-		driveStick = new Joystick(1);
-		maniStick = new Joystick(2);
+		driveStick = new Joystick(0);
+		maniStick = new Joystick(1);
 		
 		driveBtn = new JoystickButton[12];
 		maniBtn = new JoystickButton[12];

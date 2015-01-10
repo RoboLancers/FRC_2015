@@ -9,9 +9,9 @@ public class RobotMap {
 
 	
 	//Mechanum Drive Wheel Motors
-	public static final int kF_left = 1;
-	public static final int kF_right = 2;
-	public static final int kR_left = 3;
-	public static final int kR_right = 4;
+	public static final int kF_left = 0;
+	public static final int kF_right = 1;
+	public static final int kR_left = 2;
+	public static final int kR_right = 3;
 	
 }

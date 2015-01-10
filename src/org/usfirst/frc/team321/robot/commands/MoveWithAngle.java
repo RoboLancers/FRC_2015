@@ -23,20 +23,38 @@ public class MoveWithAngle extends Command {
     protected void execute() {
     	
     	//local reference for the joystick 
-    	double xIn = OI.driveStick.getRawAxis(1);
-    	double yIn =  OI.driveStick.getRawAxis(2);
+    	double xIn, yIn;
+    	
+    	//5% Tolerance
+    	if(Math.abs(OI.driveStick.getRawAxis(0)) > 0.05){
+    		xIn = OI.driveStick.getRawAxis(0);
+    	}else{
+    		xIn = 0;
+    	}
+    	
+    	if(Math.abs(OI.driveStick.getRawAxis(1)) > 0.05){
+    		yIn = -OI.driveStick.getRawAxis(1);
+    	}else{
+    		yIn = 0;
+    	}
     	
     	//get the magnitude of the joystick
     	double axisNormalized = Math.sqrt(xIn * xIn + yIn * yIn);
     	//get the value of the flexible axis to rotate, this will determine angular velocity
-    	double angVel = OI.driveStick.getRawAxis(3);
+    	double angVel;
+    	
+    	if(Math.abs(OI.driveStick.getRawAxis(2)) > 0.05){
+    		angVel = OI.driveStick.getRawAxis(2);
+    	}else{
+    		angVel = 0;
+    	}
     	//The angle defined by the cartesian plane transferred into polar coordinates
     	double angle;
     	//Make sure the angle is not undefined
     	if(xIn != 0){
-    		angle = Math.atan2(yIn, xIn);
+    		angle = Math.atan2(-OI.driveStick.getRawAxis(1), OI.driveStick.getRawAxis(0));
     	}else{
-    		angle = Math.PI - Math.abs(yIn)/yIn*Math.PI/2;
+    		angle = Math.PI - Math.abs(OI.driveStick.getRawAxis(1)) / -OI.driveStick.getRawAxis(1)*Math.PI/2;
     	}
     	
     	Robot.driveTrain.angleToDriveMechanum(axisNormalized, angVel, angle);
