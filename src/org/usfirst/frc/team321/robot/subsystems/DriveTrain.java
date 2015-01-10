@@ -1,9 +1,9 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
+import org.usfirst.frc.team321.custom.CustomMath;
 import org.usfirst.frc.team321.robot.RobotMap;
 import org.usfirst.frc.team321.robot.commands.MoveWithAngle;
 
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -48,16 +48,28 @@ public class DriveTrain extends Subsystem {
     }
 
 	public void angleToDriveMechanum(double axisNorm, double angVel, double angle) {
-    	//Enables the movement with PID
+    	//localize the variables into 4 formulas to be interpreted, as the range goes from [-2, 2] instead of [-1, 1]
+		double v1 = -(axisNorm * Math.sin(angle + (Math.PI / 4)) + angVel),
+				v2 = -(axisNorm * Math.cos(angle + (Math.PI / 4)) + angVel),
+				v3 = axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel,
+				v4 = axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel;
 		
-//		f_left.pidWrite(-(axisNorm * Math.sin(angle + (Math.PI / 4)) + angVel));
-//    	f_right.pidWrite(-(axisNorm * Math.cos(angle + (Math.PI / 4)) + angVel));
-//    	r_left.pidWrite(axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel);
-//    	r_right.pidWrite(axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel);
+		v1 = (double) CustomMath.clamp((float) v1, -1f, 1f);
+		v2 = (double) CustomMath.clamp((float) v2, -1f, 1f);
+		v3 = (double) CustomMath.clamp((float) v3, -1f, 1f);
+		v4 = (double) CustomMath.clamp((float) v4, -1f, 1f);
+		
+		
+		//Enables the movement with PID
+		
+//		f_left.pidWrite(v1);
+//    	f_right.pidWrite(v2);
+//    	r_left.pidWrite(v3);
+//    	r_right.pidWrite(v4);
     	
-    	f_left.set(-(axisNorm * Math.sin(angle + (Math.PI / 4)) + angVel));
-    	f_right.set(-(axisNorm * Math.cos(angle + (Math.PI / 4)) + angVel));
-    	r_left.set(axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel);
-    	r_right.set(axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel);
+    	f_left.set(v1);
+    	f_right.set(v2);
+    	r_left.set(v3);
+    	r_right.set(v4);
 	}
 }
