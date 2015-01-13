@@ -26,25 +26,25 @@ public class MoveWithAngle extends Command {
     	double xIn, yIn;
     	
     	//5% Tolerance
-    	if(Math.abs(OI.driveStick.getRawAxis(0)) > 0.05){
-    		xIn = OI.driveStick.getRawAxis(0);
+    	if(Math.abs(OI.driveStick.getRawAxis(3) - OI.driveStick.getRawAxis(2)) > 0.10){
+    		xIn = OI.driveStick.getRawAxis(3) - OI.driveStick.getRawAxis(2);
     	}else{
     		xIn = 0;
     	}
     	
-    	if(Math.abs(OI.driveStick.getRawAxis(1)) > 0.05){
+    	if(Math.abs(OI.driveStick.getRawAxis(1)) > 0.10){
     		yIn = -OI.driveStick.getRawAxis(1);
     	}else{
     		yIn = 0;
     	}
     	
     	//get the magnitude of the joystick
-    	double axisNormalized = Math.sqrt(xIn * xIn + yIn * yIn);
+    	double axisNormalized = Math.hypot(xIn, yIn);
     	//get the value of the flexible axis to rotate, this will determine angular velocity
     	double angVel;
     	
-    	if(Math.abs(OI.driveStick.getRawAxis(2)) > 0.05){
-    		angVel = OI.driveStick.getRawAxis(2);
+    	if(Math.abs(OI.driveStick.getRawAxis(4)) > 0.10){
+    		angVel = OI.driveStick.getRawAxis(4);
     	}else{
     		angVel = 0;
     	}
@@ -52,7 +52,7 @@ public class MoveWithAngle extends Command {
     	double angle;
     	//Make sure the angle is not undefined
     	if(xIn != 0){
-    		angle = Math.atan2(-OI.driveStick.getRawAxis(1), OI.driveStick.getRawAxis(0));
+    		angle = Math.atan2(-OI.driveStick.getRawAxis(1),OI.driveStick.getRawAxis(3) - OI.driveStick.getRawAxis(2));
     	}else{
     		angle = Math.PI - Math.abs(OI.driveStick.getRawAxis(1)) / -OI.driveStick.getRawAxis(1)*Math.PI/2;
     	}

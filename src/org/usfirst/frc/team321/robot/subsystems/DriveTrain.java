@@ -54,22 +54,45 @@ public class DriveTrain extends Subsystem {
 				v3 = axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel,
 				v4 = axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel;
 		
-		v1 = (double) CustomMath.clamp((float) v1, -1f, 1f);
-		v2 = (double) CustomMath.clamp((float) v2, -1f, 1f);
-		v3 = (double) CustomMath.clamp((float) v3, -1f, 1f);
-		v4 = (double) CustomMath.clamp((float) v4, -1f, 1f);
+		double[] speeds = new double[]{v1,v2,v3,v4};
 		
+		double max = 1; //default 1 to have something to compare to (also the miniumm of this value) 
+		
+		for(int i = 0; i < speeds.length; i++){
+			//if the speed checked is higher than the current maximum
+			if(Math.abs(speeds[i]) > max){
+				//clamp max to the speed of the index
+				max = CustomMath.clamp(speeds[i], 1.0, 2.0);
+			}
+		}
+		
+		v1 = v1 / max;
+		v2 = v2 / max;
+		v3 = v3 / max;
+		v4 = v4 / max;
 		
 		//Enables the movement with PID
 		
-//		f_left.pidWrite(v1);
-//    	f_right.pidWrite(v2);
-//    	r_left.pidWrite(v3);
-//    	r_right.pidWrite(v4);
+//		f_left.pidWrite(v1/2);
+//    	f_right.pidWrite(v2/2);
+//    	r_left.pidWrite(v3/2);
+//    	r_right.pidWrite(v4/2);
     	
     	f_left.set(v1);
     	f_right.set(v2);
     	r_left.set(v3);
     	r_right.set(v4);
+	}
+	
+	/*
+	 *	Move Towards a certain object or point 
+	 */
+	
+	public void moveTowards(double from, double to, double speed) {
+		//TODO: Method sub
+	}
+	
+	public void rotateTowards(double current, double target, double speed){
+		//TODO: Method sub
 	}
 }

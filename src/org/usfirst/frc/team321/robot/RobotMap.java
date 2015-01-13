@@ -6,7 +6,6 @@ package org.usfirst.frc.team321.robot;
  * floating around.
  */
 public class RobotMap {
-
 	
 	//Mechanum Drive Wheel Motors
 	public static final int kF_left = 0;

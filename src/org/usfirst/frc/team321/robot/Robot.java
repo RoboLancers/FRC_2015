@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team321.robot;
 
+import org.usfirst.frc.team321.robot.subsystems.Camera;
 import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -23,6 +24,7 @@ public class Robot extends IterativeRobot {
 	   
 	public static OI oi;
 	public static DriveTrain driveTrain;
+	public static Camera camera;
     
     public SendableChooser autoChooser;
 
@@ -34,8 +36,10 @@ public class Robot extends IterativeRobot {
     	//initialize all subsystems
 		oi = new OI();
 		driveTrain = new DriveTrain();
+		camera = new Camera();
         // instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
+		SmartDashboard.putData(camera);
 		
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
