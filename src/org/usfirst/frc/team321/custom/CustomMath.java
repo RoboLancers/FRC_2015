@@ -3,6 +3,9 @@ package org.usfirst.frc.team321.custom;
 public class CustomMath {
 	
 	public static float deltaTime = System.currentTimeMillis();
+	
+	public static double rad2Deg = 180 / Math.PI;
+	public static double deg2Rad = Math.PI / 180;
 	/*
 	 * Compares a min and a max to the value, and returns the value if within the bounds
 	 * else compares either the min or max, depending on its value

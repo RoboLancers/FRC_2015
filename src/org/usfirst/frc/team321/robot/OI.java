@@ -1,5 +1,8 @@
 package org.usfirst.frc.team321.robot;
 
+import org.usfirst.frc.team321.robot.commands.ResetGyro;
+import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -25,6 +28,19 @@ public class OI {
 		for(int i = 0; i < maniBtn.length; i++){
 			maniBtn[i] = new JoystickButton(maniStick, i + 1);
 		}
+		
+		/*
+		 * Drive Control:
+		 * 		A -- Reset the Gyro angle to its current orientation
+		 * 		X -- Switch the Drive Configuration: Gyro Based / Traditonal
+		 * 
+		 */
+		driveBtn[0].whenReleased(new ResetGyro());
+		driveBtn[1].whenReleased(new SwitchDriveConfig());
+		
+		/*
+		 * 
+		 */
 	}
 	
 	

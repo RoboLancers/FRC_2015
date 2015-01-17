@@ -12,5 +12,10 @@ public class RobotMap {
 	public static final int kF_right = 1;
 	public static final int kR_left = 2;
 	public static final int kR_right = 3;
+	//Intake Motors
+	public static final int intakeRight = 1;
+	public static final int intakeLeft = 2;
 	
+	
+	public static final int driveGyro = 0;
 }

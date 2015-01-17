@@ -2,8 +2,9 @@ package org.usfirst.frc.team321.robot.subsystems;
 
 import org.usfirst.frc.team321.custom.CustomMath;
 import org.usfirst.frc.team321.robot.RobotMap;
-import org.usfirst.frc.team321.robot.commands.MoveWithAngle;
+import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -12,7 +13,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class DriveTrain extends Subsystem {
-	
 	//PID Constants
 	protected static float kP = 1.0f;
 	protected static float kI = 1.0f;
@@ -20,6 +20,13 @@ public class DriveTrain extends Subsystem {
 	
 	//The speed controllers associated with the drive train
 	public static SpeedController f_left, f_right, r_left, r_right;
+	
+	//Gyroscope associated with the drive
+	public static Gyro driveGyro;
+	public double facingAngle;
+	
+	public boolean isGyroSteering;
+	
 	
 	public DriveTrain(){
 		super("Drive Train");
@@ -41,18 +48,39 @@ public class DriveTrain extends Subsystem {
 //		((CANTalon) r_left).setPID(kP, kI, kD);
 //		((CANTalon) r_right).setPID(kP, kI, kD);
 		
+		driveGyro = new Gyro(RobotMap.driveGyro);
+		driveGyro.reset();
+		facingAngle = driveGyro.getAngle() * CustomMath.deg2Rad + Math.PI / 2; //sets 90 degrees to the default facing angle
+		
+		isGyroSteering = true;
+		
 	}
 	
     public void initDefaultCommand() {
-    	setDefaultCommand(new MoveWithAngle());
+    	setDefaultCommand(new MoveWithJoystick());
     }
 
-	public void angleToDriveMechanum(double axisNorm, double angVel, double angle) {
+	public void formulateDrive(double axisNorm, double angVel, double angle) {
+		
+		double v1, v2, v3, v4;
+		
+		facingAngle = -(driveGyro.getAngle() * CustomMath.deg2Rad) + Math.PI / 2; //sets 90 degrees to the forward facing angle
+    	double angleToMove = angle - facingAngle + Math.PI / 2;
+    	
     	//localize the variables into 4 formulas to be interpreted, as the range goes from [-2, 2] instead of [-1, 1]
-		double v1 = -(axisNorm * Math.sin(angle + (Math.PI / 4)) + angVel),
-				v2 = -(axisNorm * Math.cos(angle + (Math.PI / 4)) + angVel),
-				v3 = axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel,
-				v4 = axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel;
+    	if(isGyroSteering){
+    		//Gyro Steerinng, the movement is based on the map of the field
+    		v1 = -(axisNorm * Math.sin(angleToMove + (Math.PI / 4)) + angVel);
+			v2 = -(axisNorm * Math.cos(angleToMove + (Math.PI / 4)) + angVel);
+			v3 = axisNorm * Math.cos(angleToMove + (Math.PI / 4)) - angVel;
+			v4 = axisNorm * Math.sin(angleToMove + (Math.PI / 4)) - angVel;
+    	}else{
+    		//Non Gyro Steering (Traditional): the movement is based on a defined forward for the robot
+    		v1 = -(axisNorm * Math.sin(angle + (Math.PI / 4)) + angVel);
+    		v2 = -(axisNorm * Math.cos(angle + (Math.PI / 4)) + angVel);
+    		v3 = axisNorm * Math.cos(angle + (Math.PI / 4)) - angVel;
+    		v4 = axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel;
+    	}
 		
 		double[] speeds = new double[]{v1,v2,v3,v4};
 		
@@ -62,7 +90,7 @@ public class DriveTrain extends Subsystem {
 			//if the speed checked is higher than the current maximum
 			if(Math.abs(speeds[i]) > max){
 				//clamp max to the speed of the index
-				max = CustomMath.clamp(speeds[i], 1.0, 2.0);
+				max = CustomMath.clamp(Math.abs(speeds[i]), 1.0, 2.0);
 			}
 		}
 		
@@ -70,26 +98,22 @@ public class DriveTrain extends Subsystem {
 		v2 = v2 / max;
 		v3 = v3 / max;
 		v4 = v4 / max;
-		
-		//Enables the movement with PID
-		
-//		f_left.pidWrite(v1/2);
-//    	f_right.pidWrite(v2/2);
-//    	r_left.pidWrite(v3/2);
-//    	r_right.pidWrite(v4/2);
     	
     	f_left.set(v1);
     	f_right.set(v2);
     	r_left.set(v3);
     	r_right.set(v4);
+    	
+//    	((CANTalon) f_left).set(v1);
+//    	((CANTalon) f_right).set(v2);
+//    	((CANTalon) r_left).set(v3);
+//    	((CANTalon) r_right).set(v4);
 	}
 	
-	/*
-	 *	Move Towards a certain object or point 
-	 */
 	
 	public void moveTowards(double from, double to, double speed) {
 		//TODO: Method sub
+		
 	}
 	
 	public void rotateTowards(double current, double target, double speed){

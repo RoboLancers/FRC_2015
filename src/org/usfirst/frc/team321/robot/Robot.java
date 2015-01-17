@@ -1,8 +1,10 @@
 
 package org.usfirst.frc.team321.robot;
 
+import org.usfirst.frc.team321.robot.commands.DriveStraight;
 import org.usfirst.frc.team321.robot.subsystems.Camera;
 import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team321.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -22,10 +24,13 @@ public class Robot extends IterativeRobot {
 
 	Command autonomousCommand;
 	   
-	public static OI oi;
 	public static DriveTrain driveTrain;
 	public static Camera camera;
-    
+	public static Intake intake;
+	
+	//always create OI last
+	public static OI oi;
+	
     public SendableChooser autoChooser;
 
     /**
@@ -33,17 +38,22 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    	//initialize all subsystems
-		oi = new OI();
+    	//initialize all subsystem
 		driveTrain = new DriveTrain();
 		camera = new Camera();
+		intake = new Intake();
+		
+		oi = new OI();
+		
         // instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(camera);
+		SmartDashboard.putData(intake);
 		
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
+		autoChooser.addObject("Drive Forward", new DriveStraight());
 		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 		
 		SmartDashboard.putData("Auto Mode", autoChooser);
