@@ -84,7 +84,7 @@ public class DriveTrain extends Subsystem {
 		
 		double[] speeds = new double[]{v1,v2,v3,v4};
 		
-		double max = 1; //default 1 to have something to compare to (also the miniumm of this value) 
+		double max = 1; //default 1 to have something to compare to (also the minimum of this value) 
 		
 		for(int i = 0; i < speeds.length; i++){
 			//if the speed checked is higher than the current maximum

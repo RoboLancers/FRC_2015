@@ -33,14 +33,14 @@ public class PID {
     
     
     private double PIDCalculate(double error){
-    	
-    	tD = System.currentTimeMillis();
-          
+    	    	        
     	proportion = (kP * error);
+    	
         derivative = (kD * (error - errorInit) / (System.currentTimeMillis() - tD));
         errorInit = error;
+        tD = System.currentTimeMillis();
+        
         integral = (kI * (integral + error * (System.currentTimeMillis() - tI)));
-          
         tI = System.currentTimeMillis();
           
         result = (proportion + integral + derivative);

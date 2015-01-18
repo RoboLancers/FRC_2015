@@ -53,6 +53,9 @@ public class MoveWithJoystick extends Command {
     	//Make sure the angle is not undefined
     	if(xIn != 0){
     		angle = Math.atan2(-OI.driveStick.getRawAxis(1),OI.driveStick.getRawAxis(0));
+    	}
+    	else if(yIn == 0 && xIn == 0){
+    		angle = Math.PI/2;
     	}else{
     		angle = Math.PI - Math.abs(OI.driveStick.getRawAxis(1)) / -OI.driveStick.getRawAxis(1)*Math.PI/2;
     	}
