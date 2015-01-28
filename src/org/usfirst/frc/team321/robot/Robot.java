@@ -5,6 +5,7 @@ import org.usfirst.frc.team321.robot.commands.DriveStraight;
 import org.usfirst.frc.team321.robot.subsystems.Camera;
 import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team321.robot.subsystems.Intake;
+import org.usfirst.frc.team321.robot.subsystems.Feedback;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -27,6 +28,7 @@ public class Robot extends IterativeRobot {
 	public static DriveTrain driveTrain;
 	public static Camera camera;
 	public static Intake intake;
+	public static Feedback feedback;	
 	
 	//always create OI last
 	public static OI oi;
@@ -42,6 +44,7 @@ public class Robot extends IterativeRobot {
 		driveTrain = new DriveTrain();
 		camera = new Camera();
 		intake = new Intake();
+		feedback = new Feedback();
 		
 		oi = new OI();
 		

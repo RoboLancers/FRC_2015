@@ -4,6 +4,7 @@ import org.usfirst.frc.team321.custom.CustomMath;
 import org.usfirst.frc.team321.robot.RobotMap;
 import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -32,21 +33,26 @@ public class DriveTrain extends Subsystem {
 		super("Drive Train");
 		//Create the speed controller and specify type
 		
-//		f_left = new CANTalon(RobotMap.kF_left);
-//		f_right = new CANTalon(RobotMap.kF_right);
-//		r_left = new CANTalon(RobotMap.kR_left);
-//		r_right = new CANTalon(RobotMap.kR_right);
+		f_left = new CANTalon(RobotMap.kF_left);
+		f_right = new CANTalon(RobotMap.kF_right);
+		r_left = new CANTalon(RobotMap.kR_left);
+		r_right = new CANTalon(RobotMap.kR_right);
 		
-		f_left = new Talon(RobotMap.kF_left);
-		f_right = new Talon(RobotMap.kF_right);
-		r_left = new Talon(RobotMap.kR_left);
-		r_right = new Talon(RobotMap.kR_right);
+//		f_left = new Talon(RobotMap.kF_left);
+//		f_right = new Talon(RobotMap.kF_right);
+//		r_left = new Talon(RobotMap.kR_left);
+//		r_right = new Talon(RobotMap.kR_right);
 		
 //		//Cast the speed controller as a CANTalon and set the pid to the constants above
 //		((CANTalon) f_left).setPID(kP, kI, kD);
 //		((CANTalon) f_right).setPID(kP, kI, kD);
 //		((CANTalon) r_left).setPID(kP, kI, kD);
 //		((CANTalon) r_right).setPID(kP, kI, kD);
+		
+		((CANTalon) f_left).changeControlMode(CANTalon.ControlMode.PercentVbus);
+		((CANTalon) f_right).changeControlMode(CANTalon.ControlMode.PercentVbus);
+		((CANTalon) r_left).changeControlMode(CANTalon.ControlMode.PercentVbus);
+		((CANTalon) r_right).changeControlMode(CANTalon.ControlMode.PercentVbus);
 		
 		driveGyro = new Gyro(RobotMap.driveGyro);
 		driveGyro.reset();
@@ -99,15 +105,15 @@ public class DriveTrain extends Subsystem {
 		v3 = v3 / max;
 		v4 = v4 / max;
     	
-    	f_left.set(v1);
-    	f_right.set(v2);
-    	r_left.set(v3);
-    	r_right.set(v4);
+//    	f_left.set(v1);
+//    	f_right.set(v2);
+//    	r_left.set(v3);
+//    	r_right.set(v4);
     	
-//    	((CANTalon) f_left).set(v1);
-//    	((CANTalon) f_right).set(v2);
-//    	((CANTalon) r_left).set(v3);
-//    	((CANTalon) r_right).set(v4);
+    	((CANTalon) f_left).set(v1);
+    	((CANTalon) f_right).set(v2);
+    	((CANTalon) r_left).set(v3);
+    	((CANTalon) r_right).set(v4);
 	}
 	
 	

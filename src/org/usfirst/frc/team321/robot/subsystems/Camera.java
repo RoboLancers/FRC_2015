@@ -24,20 +24,20 @@ public class Camera extends Subsystem {
     Range rangeIR;
 
     public Camera(){	
-        //frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+        frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
     	
-        //camServer.setQuality(50); //TODO: Configure camera quality
-        //camServer.startAutomaticCapture("cam0");
+        camServer.setQuality(50); //TODO: Configure camera quality
+        camServer.startAutomaticCapture("cam0");
         
-        frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_HSL, 0);//Creates a blank HSL image
-        frameBin =NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8,0);//Creates blank binary image
-        
-        session = NIVision.IMAQdxOpenCamera("cam0",NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        
-        
-        rangeIR = new Range(280,300);//Sets hue range for IR on the camera
-        
-        NIVision.IMAQdxConfigureGrab(session); 
+//        frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_HSL, 0);//Creates a blank HSL image
+//        frameBin = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8,0);//Creates blank binary image
+//        
+//        session = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//        
+//        
+//        rangeIR = new Range(260,300);//Sets hue range for IR on the camera
+//        
+//        NIVision.IMAQdxConfigureGrab(session); 
     }
     
     public void initDefaultCommand() {
@@ -59,6 +59,8 @@ public class Camera extends Subsystem {
              
              NIVision.imaqColorThreshold(frameBin, frame, session, ColorMode.HSL, rangeIR, null, null);//Takes in frame and writes on frameBin if a certain pixel's hue is within the IR range
              //From here I'll work with the binary image
+             
+             CameraServer.getInstance().setImage(frameBin);
              
              //Timer.delay(0.005);
          //}

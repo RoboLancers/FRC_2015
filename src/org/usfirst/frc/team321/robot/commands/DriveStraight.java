@@ -29,10 +29,15 @@ public class DriveStraight extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	//double angle = Math.PI / 2;
-    	double angle = 90 * CustomMath.deg2Rad;
+    	double angle = Math.PI/2;
+    	double corrected = angle;
+    	
+    	if(pid){
+    		corrected = correct.gyroCalc();
+    	}
     	
     	while(Timer.getMatchTime() < 4.0){
-    		Robot.driveTrain.formulateDrive(0.5, 0, angle);
+    		Robot.driveTrain.formulateDrive(0.5, corrected, angle);
     	}
     	
     	//stop the robot

@@ -51,7 +51,7 @@ public class PID {
     private double PIDError(double encoder, double xIn, double yIn, double zIn){
     	switch(wheel){
     	
-    		//TODO: fix error formulae (see "DriveTrain.angleToDriveMechanum" method)
+    		//TODO: fix error formulae (see "DriveTrain.formulateDrive" method)
     		case 1:
     			error = (Math.hypot(xIn,yIn)*Math.sin(Math.atan2(yIn, xIn)+Math.PI/4)+ zIn) -kEncoder * encoder;
     			break;

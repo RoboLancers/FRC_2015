@@ -8,14 +8,18 @@ package org.usfirst.frc.team321.robot;
 public class RobotMap {
 	
 	//Mechanum Drive Wheel Motors
-	public static final int kF_left = 0;
+	public static final int kF_left = 3;
 	public static final int kF_right = 1;
-	public static final int kR_left = 2;
-	public static final int kR_right = 3;
+	public static final int kR_left = 4;
+	public static final int kR_right = 2;
 	//Intake Motors
 	public static final int intakeRight = 1;
 	public static final int intakeLeft = 2;
 	
 	
 	public static final int driveGyro = 0;
+	
+	
+	public static final int leftIR = 0;
+	public static final int rightIR = 1;
 }
