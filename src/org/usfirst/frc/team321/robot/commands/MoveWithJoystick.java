@@ -25,7 +25,7 @@ public class MoveWithJoystick extends Command {
     	//local reference for the joystick 
     	double xIn, yIn;
     	
-    	//5% Tolerance
+    	//1% Tolerance
     	if(Math.abs(OI.driveStick.getRawAxis(0)) > 0.01){
     		xIn = OI.driveStick.getRawAxis(0);
     	}else{

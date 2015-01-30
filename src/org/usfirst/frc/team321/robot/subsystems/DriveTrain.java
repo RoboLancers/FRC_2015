@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class DriveTrain extends Subsystem {
+	
 	//PID Constants
 	protected static float kP = 1.0f;
 	protected static float kI = 1.0f;
@@ -21,6 +22,8 @@ public class DriveTrain extends Subsystem {
 	
 	//The speed controllers associated with the drive train
 	public static SpeedController f_left, f_right, r_left, r_right;
+	
+	public static double[] motorLimit = new double[4];
 	
 	//Gyroscope associated with the drive
 	public static Gyro driveGyro;
@@ -116,6 +119,9 @@ public class DriveTrain extends Subsystem {
     	((CANTalon) r_right).set(v4);
 	}
 	
+	public static void formulateMotorLim(){
+		motorLim[1]
+	}
 	
 	public void moveTowards(double from, double to, double speed) {
 		//TODO: Method sub

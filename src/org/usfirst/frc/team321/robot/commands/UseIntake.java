@@ -22,12 +22,12 @@ public class UseIntake extends Command {
     protected void execute() {
     	//use the intake
     	if(OI.maniBtn[0].get()){
-    		Robot.intake.useIntake(1.0);
+    		Robot.intake.useFeeder(1.0);
     	}
     	else if(OI.maniBtn[1].get()){
-    		Robot.intake.useIntake(-1.0);
+    		Robot.intake.useFeeder(-1.0);
     	}else{
-    		Robot.intake.useIntake(0);
+    		Robot.intake.useFeeder(0);
     	}
     }
 
