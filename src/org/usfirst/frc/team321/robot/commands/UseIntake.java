@@ -39,7 +39,7 @@ public class UseIntake extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	//Stop the intake
-    	Robot.intake.useIntake(0);
+    	Robot.intake.raiseIntake(0);
     }
 
     // Called when another command which requires one or more of the same

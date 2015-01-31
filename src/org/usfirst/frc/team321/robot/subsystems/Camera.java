@@ -14,7 +14,7 @@ public class Camera extends Subsystem {
 	
 	Image frame;
     CameraServer camServer = CameraServer.getInstance();
-    ROI roi;
+    ROI roi = null;
     
     public Camera(){	
         frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
@@ -36,8 +36,7 @@ public class Camera extends Subsystem {
     			 new NIVision.ShapeDetectionOptions(),
     			 roi //I think it takes in this blank object and writes onto it
     	 );
-       
 
-    }
+    } 
 }
 

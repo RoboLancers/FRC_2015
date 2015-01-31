@@ -1,20 +1,17 @@
-
 package org.usfirst.frc.team321.robot;
-
+ 
 import org.usfirst.frc.team321.robot.commands.DriveStraight;
 import org.usfirst.frc.team321.robot.subsystems.Camera;
 import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team321.robot.subsystems.Feedback;
 import org.usfirst.frc.team321.robot.subsystems.Intake;
-
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+ 
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -23,88 +20,93 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
-	Command autonomousCommand;
-	
-	public static DriveTrain driveTrain;
-	public static Camera camera;
-	public static Intake intake;
-	public static Feedback feedback;
-	
-	//always create OI last
-	public static OI oi;
-	
+ 
+        Command autonomousCommand;
+       
+        public static DriveTrain driveTrain;
+        public static Camera camera;
+        public static Intake intake;
+        public static Feedback feedback;       
+       
+        public static boolean isPractice = false;
+       
+        //always create OI last
+        public static OI oi;
+       
     public SendableChooser autoChooser;
-
+ 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-    	//initialize all subsystem
-		driveTrain = new DriveTrain();
-		camera = new Camera();
-		intake = new Intake();
-		feedback = new Feedback();
-		
-		oi = new OI();
-		
+       
+        //initialize all subsystem
+                driveTrain = new DriveTrain();
+                camera = new Camera();
+                intake = new Intake();
+                feedback = new Feedback();
+               
+                oi = new OI();
+               
         // instantiate the command used for the autonomous period
-		SmartDashboard.putData(driveTrain);
-		SmartDashboard.putData(camera);
-		SmartDashboard.putData(intake);
-		
-		//Autonomous Chooser in the Smart Dashboard
-		autoChooser = new SendableChooser();
-		autoChooser.addDefault("No Autonomous", null);
-		autoChooser.addObject("Drive Forward", new DriveStraight());
-		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
-		
-		SmartDashboard.putData("Auto Mode", autoChooser);
-		
+                SmartDashboard.putData(driveTrain);
+                SmartDashboard.putData(camera);
+                SmartDashboard.putData(intake);
+               
+                //Autonomous Chooser in the Smart Dashboard
+                autoChooser = new SendableChooser();
+                autoChooser.addDefault("No Autonomous", null);
+                autoChooser.addObject("Drive Forward", new DriveStraight());
+                //autoChooser.addObject("Name of Autonomous", new AutoCommand());
+               
+                SmartDashboard.putData("Auto Mode", autoChooser);
+               
     }
-	
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
+       
+        public void disabledPeriodic() {
+                Scheduler.getInstance().run();
+        }
+ 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	autonomousCommand = (Command) autoChooser.getSelected();
-    	
+        autonomousCommand = (Command) autoChooser.getSelected();
+       
         if (autonomousCommand != null) autonomousCommand.start();
     }
-
+ 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
     }
-
+ 
     public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
+                // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
+        
+    	
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
-
+ 
     /**
      * This function is called when the disabled button is hit.
      * You can use it to reset subsystems before shutting down.
      */
     public void disabledInit(){
-
+ 
     }
-
+ 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
     }
-    
+   
     /**
      * This function is called periodically during test mode
      */
