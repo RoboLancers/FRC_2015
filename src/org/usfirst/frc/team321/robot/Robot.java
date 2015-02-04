@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
         public static Intake intake;
         public static Feedback feedback;       
        
-        public static boolean isPractice = false;
+        public static boolean isPractice = true;
        
         //always create OI last
         public static OI oi;

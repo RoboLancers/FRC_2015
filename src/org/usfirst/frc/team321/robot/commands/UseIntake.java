@@ -29,6 +29,16 @@ public class UseIntake extends Command {
     	}else{
     		Robot.intake.useFeeder(0);
     	}
+    	
+    	
+    	if(OI.maniBtn[4].get()){
+    		Robot.intake.raiseIntake(0.5);
+    	}
+    	else if(OI.maniBtn[2].get()){
+    		Robot.intake.raiseIntake(-0.5);
+    	}else{
+    		Robot.intake.raiseIntake(0);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -39,6 +49,7 @@ public class UseIntake extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	//Stop the intake
+    	Robot.intake.useFeeder(0);
     	Robot.intake.raiseIntake(0);
     }
 
