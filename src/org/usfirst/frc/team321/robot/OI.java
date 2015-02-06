@@ -1,5 +1,6 @@
 package org.usfirst.frc.team321.robot;
 
+import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
 import org.usfirst.frc.team321.robot.commands.ResetGyro;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
 
@@ -38,6 +39,7 @@ public class OI {
 		driveBtn[0].whenReleased(new ResetGyro());
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
 		
+		maniBtn[1].whenReleased(new DSolenoidToggle(Robot.intake, Robot.intake.liftSolenoid));
 		/*
 		 * 
 		 */

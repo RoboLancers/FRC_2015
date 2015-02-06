@@ -1,9 +1,11 @@
 package org.usfirst.frc.team321.robot.subsystems;
  
 import org.usfirst.frc.team321.robot.Robot;
-import org.usfirst.frc.team321.custom.CustomMath;
 import org.usfirst.frc.team321.robot.RobotMap;
 import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
+import org.usfirst.frc.team321.util.LancerConstants;
+import org.usfirst.frc.team321.util.LancerFunctions;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -15,18 +17,13 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DriveTrain extends Subsystem {
        
-        //PID Constants
-        protected static float kP = 1.0f;
-        protected static float kI = 1.0f;
-        protected static float kD = 1.0f;
-       
         //The speed controllers associated with the drive train
         public static SpeedController f_left, f_right, r_left, r_right;
        
         public static double[] motorLimit = new double[4];
        
         //Gyroscope associated with the drive
-        public static Gyro driveGyro;
+        public Gyro driveGyro;
         public double facingAngle;
        
         public boolean isGyroSteering;
@@ -69,7 +66,7 @@ public class DriveTrain extends Subsystem {
                
                 driveGyro = new Gyro(RobotMap.driveGyro);
                 driveGyro.reset();
-                facingAngle = driveGyro.getAngle() * CustomMath.deg2Rad + Math.PI / 2; //sets 90 degrees to the default facing angle
+                facingAngle = driveGyro.getAngle() * LancerConstants.deg2Rad + Math.PI / 2; //sets 90 degrees to the default facing angle
                
                 isGyroSteering = true;
                
@@ -83,7 +80,7 @@ public class DriveTrain extends Subsystem {
                
         double v1, v2, v3, v4;
                
-        facingAngle = -(driveGyro.getAngle() * CustomMath.deg2Rad) + Math.PI / 2; //sets 90 degrees to the forward facing angle
+        facingAngle = -(driveGyro.getAngle() * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the forward facing angle
         
         double angleToMove = angle - facingAngle + Math.PI / 2;
        
@@ -105,24 +102,12 @@ public class DriveTrain extends Subsystem {
                 v4 = axisNorm * Math.sin(angle + (Math.PI / 4)) - angVel;
         }
                
-                double[] speeds = new double[]{v1,v2,v3,v4};
-               
-                double max = 1; //default 1 to have something to compare to (also the minimum of this value)
-               
-                for(int i = 0; i < speeds.length; i++){
-                        //if the speed checked is higher than the current maximum
-                        if(Math.abs(speeds[i]) > max){
-                                //clamp max to the speed of the index
-                                max = CustomMath.clamp(Math.abs(speeds[i]), 1.0, 2.0);
-                        }
-                }
-               
-                v1 = v1 / max;
-                v2 = v2 / max;
-                v3 = v3 / max;
-                v4 = v4 / max;
-               
-                mechanumDrive(v1, v2, v3, v4);
+                double[] speeds = new double[]{ v1, v2, v3, v4 };
+                
+                speeds = LancerFunctions.normalize(speeds);
+                
+                               
+                mechanumDrive(speeds[0], speeds[1], speeds[2], speeds[3]);
         }
        
         public void mechanumDrive(double frontLeft, double frontRight, double backLeft, double backRight){
@@ -139,7 +124,7 @@ public class DriveTrain extends Subsystem {
                         r_right.set(backRight);
                 }
         }
-       
+        
         public static void formulateMotorLim(){
         	//TODO: Formulate Motor Limits
         }

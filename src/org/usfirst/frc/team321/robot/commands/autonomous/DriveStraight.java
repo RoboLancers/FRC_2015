@@ -1,9 +1,9 @@
-package org.usfirst.frc.team321.robot.commands;
+package org.usfirst.frc.team321.robot.commands.autonomous;
 
-import org.usfirst.frc.team321.custom.CustomMath;
-import org.usfirst.frc.team321.custom.PID;
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team321.util.LancerFunctions;
+import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveStraight extends Command {
 
-	private PID correct = new PID();
+	private LancerPID correct = new LancerPID();
 	boolean pid = true;
 	
     public DriveStraight() {

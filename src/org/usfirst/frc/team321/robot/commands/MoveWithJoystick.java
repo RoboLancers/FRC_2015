@@ -2,6 +2,7 @@ package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.OI;
 import org.usfirst.frc.team321.robot.Robot;
+import org.usfirst.frc.team321.util.LancerFunctions;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -25,29 +26,18 @@ public class MoveWithJoystick extends Command {
     	//local reference for the joystick 
     	double xIn, yIn;
     	
-    	//1% Tolerance
-    	if(Math.abs(OI.driveStick.getRawAxis(0)) > 0.01){
-    		xIn = OI.driveStick.getRawAxis(0);
-    	}else{
-    		xIn = 0;
-    	}
+    	//1% Tolerance for X and Y Axis
+    	xIn = LancerFunctions.deadBand(OI.driveStick.getRawAxis(0), 0.10);
     	
-    	if(Math.abs(OI.driveStick.getRawAxis(1)) > 0.01){
-    		yIn = -OI.driveStick.getRawAxis(1);
-    	}else{
-    		yIn = 0;
-    	}
+    	yIn = LancerFunctions.deadBand(OI.driveStick.getRawAxis(1), 0.10);
     	
     	//get the magnitude of the joystick
     	double axisNormalized = Math.hypot(xIn, yIn);
     	//get the value of the flexible axis to rotate, this will determine angular velocity
     	double angVel;
     	
-    	if(Math.abs(OI.driveStick.getRawAxis(4)) > 0.01){
-    		angVel = OI.driveStick.getRawAxis(4);
-    	}else{
-    		angVel = 0;
-    	}
+    	angVel = LancerFunctions.deadBand(OI.driveStick.getRawAxis(4), 0.10);
+    	
     	//The angle defined by the cartesian plane transferred into polar coordinates
     	double angle;
     	//Make sure the angle is not undefined

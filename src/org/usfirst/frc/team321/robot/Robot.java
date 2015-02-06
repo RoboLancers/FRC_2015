@@ -1,10 +1,8 @@
 package org.usfirst.frc.team321.robot;
  
-import org.usfirst.frc.team321.robot.commands.DriveStraight;
-import org.usfirst.frc.team321.robot.subsystems.Camera;
-import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team321.robot.subsystems.Feedback;
-import org.usfirst.frc.team321.robot.subsystems.Intake;
+import org.usfirst.frc.team321.robot.commands.autonomous.*;
+import org.usfirst.frc.team321.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -26,9 +24,10 @@ public class Robot extends IterativeRobot {
         public static DriveTrain driveTrain;
         public static Camera camera;
         public static Intake intake;
-        public static Feedback feedback;       
+        public static Feedback feedback;   
+        public static Pneumatics pneumatics;
        
-        public static boolean isPractice = true;
+        public static boolean isPractice = false;
        
         //always create OI last
         public static OI oi;
@@ -43,21 +42,24 @@ public class Robot extends IterativeRobot {
        
         //initialize all subsystem
                 driveTrain = new DriveTrain();
-                camera = new Camera();
+                //camera = new Camera();
                 intake = new Intake();
                 feedback = new Feedback();
+                pneumatics = new Pneumatics();
                
+                //Always create OI last
                 oi = new OI();
                
         // instantiate the command used for the autonomous period
                 SmartDashboard.putData(driveTrain);
-                SmartDashboard.putData(camera);
+               //SmartDashboard.putData(camera);
                 SmartDashboard.putData(intake);
                
                 //Autonomous Chooser in the Smart Dashboard
                 autoChooser = new SendableChooser();
                 autoChooser.addDefault("No Autonomous", null);
                 autoChooser.addObject("Drive Forward", new DriveStraight());
+                autoChooser.addObject("Drive Forward", new IRLockOnDrive());
                 //autoChooser.addObject("Name of Autonomous", new AutoCommand());
                
                 SmartDashboard.putData("Auto Mode", autoChooser);
