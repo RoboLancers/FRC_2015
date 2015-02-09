@@ -1,8 +1,10 @@
 package org.usfirst.frc.team321.robot;
  
+
 import org.usfirst.frc.team321.robot.commands.autonomous.*;
 import org.usfirst.frc.team321.robot.subsystems.*;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -28,7 +30,12 @@ public class Robot extends IterativeRobot {
         public static Pneumatics pneumatics;
        
         public static boolean isPractice = false;
-       
+        
+        //time for location tracking using built in accelerometer in RegulateSensors
+        public static double xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
+        public static Timer timer = new Timer();
+        public static double prevTime = timer.getFGPATimestamp();
+        
         //always create OI last
         public static OI oi;
        
