@@ -76,7 +76,7 @@ public class DriveTrain extends Subsystem {
         setDefaultCommand(new MoveWithJoystick());
     }
  
-        public void formulateDrive(double axisNorm, double angVel, double angle) {
+    public void formulateDrive(double axisNorm, double angVel, double angle) {
                
         double v1, v2, v3, v4;
                
