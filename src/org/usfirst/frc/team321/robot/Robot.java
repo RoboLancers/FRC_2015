@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
         //time for location tracking using built in accelerometer in RegulateSensors
         public static double xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
         public static Timer timer = new Timer();
-        public static double prevTime = timer.getFGPATimestamp();
+        public static double prevTime = timer.getFPGATimestamp();
         
         //always create OI last
         public static OI oi;
