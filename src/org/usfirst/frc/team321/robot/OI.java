@@ -39,7 +39,7 @@ public class OI {
 		driveBtn[0].whenReleased(new ResetGyro());
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
 		
-		maniBtn[1].whenReleased(new DSolenoidToggle(Robot.intake, Robot.intake.liftSolenoid));
+		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.intake, Robot.intake.liftSolenoid));
 		/*
 		 * 
 		 */

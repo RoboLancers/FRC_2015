@@ -49,11 +49,14 @@ public class Robot extends IterativeRobot {
        
         //initialize all subsystem
                 driveTrain = new DriveTrain();
-                //camera = new Camera();
                 intake = new Intake();
                 feedback = new Feedback();
                 pneumatics = new Pneumatics();
-               
+                
+                try{
+                	//camera = new Camera();
+                }
+                catch(NullPointerException e){}//swallow
                 //Always create OI last
                 oi = new OI();
                
@@ -66,7 +69,7 @@ public class Robot extends IterativeRobot {
                 autoChooser = new SendableChooser();
                 autoChooser.addDefault("No Autonomous", null);
                 autoChooser.addObject("Drive Forward", new DriveStraight());
-                autoChooser.addObject("Drive Forward", new IRLockOnDrive());
+                autoChooser.addObject("IR Strafe", new IRLockOnDrive());
                 //autoChooser.addObject("Name of Autonomous", new AutoCommand());
                
                 SmartDashboard.putData("Auto Mode", autoChooser);
