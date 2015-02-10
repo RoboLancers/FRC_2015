@@ -12,7 +12,7 @@ public class LancerPID {
 	private	boolean isFirstCycle;
 	private int cycleCount, minCycleCount;
 	
-	//Blank Constructor
+	//Blank Constructor: Remember, The PID will not increment for the output
 	public LancerPID(){
 		this(0.0, 0.0, 0.0, 0.0);
 	}

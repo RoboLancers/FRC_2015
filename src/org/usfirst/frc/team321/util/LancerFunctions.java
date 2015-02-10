@@ -1,6 +1,29 @@
 package org.usfirst.frc.team321.util;
 
-public final class LancerFunctions {
+public class LancerFunctions {
+	
+	public class Integrator{
+		double integral;
+		double previous;
+		boolean init = true;
+		double initTime = System.currentTimeMillis();
+		
+		
+		public double getI(double fx){
+				if(init){
+					integral = fx*(System.currentTimeMillis()-initTime);
+					previous = fx;
+					initTime = System.currentTimeMillis();
+					init = false;
+					return integral;
+				}else{
+					integral = integral + 1/2 * (System.currentTimeMillis()-initTime) * (fx + previous);
+					previous = fx;
+					initTime = System.currentTimeMillis();
+					return integral;
+				}
+			}
+	}
 	
 	/*
 	 * Compares a min and a max to the value, and returns the value if within the bounds
@@ -59,8 +82,7 @@ public final class LancerFunctions {
 	 *  Linear Interpolation (LERP) is a method of curve fitting linearly
 	 *  This function can be used to fill gaps between variables 
 	 */
-	public static float lerp(float from, float to, float delta){
+	public static double lerp(double from, double to, double delta){
 		return (1 - delta) * from + delta * to;
 	}
-	
 }

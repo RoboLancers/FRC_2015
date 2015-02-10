@@ -35,14 +35,14 @@ public class IRLockOnDrive extends Command {
     	if(left && !right){
     		//TODO: Strafe right to correct the robot
     		
-    		Robot.driveTrain.formulateDrive(1, 0, 0); //Should make formulateDrive static ?
+    		Robot.driveTrain.driveWithJoystick(1, 0, 0); //Should make formulateDrive static ?
     		 
     		lastLeft = true;
     	}
     	else if(!left && right){
     		//TODO: Strafe right to correct the robot
     		
-    		Robot.driveTrain.formulateDrive(1, 0, Math.PI); //Should make formulateDrive static
+    		Robot.driveTrain.driveWithJoystick(1, 0, Math.PI); //Should make formulateDrive static
     		lastLeft = false;
     	}
     	else if(!left && !right){
@@ -50,12 +50,12 @@ public class IRLockOnDrive extends Command {
     		if(lastLeft){
     			//Rotate Right
     			
-    			Robot.driveTrain.formulateDrive(1, 0.2, Math.PI/2); //Should make formulateDrive static
+    			Robot.driveTrain.driveWithJoystick(1, 0.2, Math.PI/2); //Should make formulateDrive static
     			
     		}else{
     			//Rotate Left
     			
-    			Robot.driveTrain.formulateDrive(1, -0.2, Math.PI/2); //Should make formulateDrive static
+    			Robot.driveTrain.driveWithJoystick(1, -0.2, Math.PI/2); //Should make formulateDrive static
     			
     		}
     	} else {

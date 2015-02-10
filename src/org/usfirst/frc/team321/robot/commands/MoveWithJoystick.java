@@ -50,7 +50,7 @@ public class MoveWithJoystick extends Command {
     		angle = Math.PI - Math.abs(OI.driveStick.getRawAxis(1)) / -OI.driveStick.getRawAxis(1)*Math.PI/2;
     	}
     	
-    	Robot.driveTrain.formulateDrive(axisNormalized, angVel, angle);
+    	Robot.driveTrain.driveWithJoystick(axisNormalized, angVel, angle);
     }
 
     // Make this return true when this Command no longer needs to run execute()

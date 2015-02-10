@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveStraight extends Command {
 
-	private LancerPID pid = new LancerPID();
+	private LancerPID pid = new LancerPID(1,1,1);
+	double angle;
 	
     public DriveStraight() {
     	requires(Robot.driveTrain);
@@ -22,21 +23,20 @@ public class DriveStraight extends Command {
     protected void initialize() {
     	//make sure the set point is now forward
     	Robot.driveTrain.driveGyro.reset();
+    	angle = Math.PI;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//double angle = Math.PI / 2;
-    	double angle = Math.PI/2;
     	
     	pid.setReference(angle);
     	
     	while(Timer.getMatchTime() < 4.0){
-    		Robot.driveTrain.formulateDrive(0.5, 0, pid.calcPID(Robot.driveTrain.driveGyro.getAngle() * LancerConstants.deg2Rad));
+    		Robot.driveTrain.driveWithJoystick(0.5, 0, pid.calcPID(-(Robot.driveTrain.driveGyro.getAngle() * LancerConstants.deg2Rad) + Math.PI/2));
     	}
     	
     	//stop the robot
-    	Robot.driveTrain.formulateDrive(0, 0, 0);
+    	Robot.driveTrain.driveWithJoystick(0, 0, 0);
     	
     }
 

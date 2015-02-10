@@ -5,6 +5,7 @@ import org.usfirst.frc.team321.robot.RobotMap;
 import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
+import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Gyro;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DriveTrain extends Subsystem {
        
+		
         //The speed controllers associated with the drive train
         public static SpeedController f_left, f_right, r_left, r_right;
        
@@ -29,6 +31,10 @@ public class DriveTrain extends Subsystem {
         public boolean isGyroSteering;
        
         public int[] drivePorts;
+        
+        public double kP = 1.0,
+        		kI = 1.0,
+        		kD = 1.0;
        
         public DriveTrain(){
                 super("Drive Train");
@@ -48,10 +54,10 @@ public class DriveTrain extends Subsystem {
                         ((CANTalon) r_right).changeControlMode(CANTalon.ControlMode.PercentVbus);
                                
                         //Cast the speed controller as a CANTalon and set the pid to the constants above
-//                      ((CANTalon) f_left).setPID(kP, kI, kD);
-//                      ((CANTalon) f_right).setPID(kP, kI, kD);
-//                      ((CANTalon) r_left).setPID(kP, kI, kD);
-//                      ((CANTalon) r_right).setPID(kP, kI, kD);
+                      ((CANTalon) f_left).setPID(kP, kI, kD);
+                      ((CANTalon) f_right).setPID(kP, kI, kD);
+                      ((CANTalon) r_left).setPID(kP, kI, kD);
+                      ((CANTalon) r_right).setPID(kP, kI, kD);
                 }else{
                         drivePorts = new int[]{0, 1, 2, 3};
                        
@@ -66,7 +72,8 @@ public class DriveTrain extends Subsystem {
                
                 driveGyro = new Gyro(RobotMap.driveGyro);
                 driveGyro.reset();
-                facingAngle = driveGyro.getAngle() * LancerConstants.deg2Rad + Math.PI / 2; //sets 90 degrees to the default facing angle
+                
+                facingAngle = -(driveGyro.getAngle() * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the default facing angle
                
                 isGyroSteering = true;
                
@@ -76,7 +83,7 @@ public class DriveTrain extends Subsystem {
         setDefaultCommand(new MoveWithJoystick());
     }
  
-    public void formulateDrive(double axisNorm, double angVel, double angle) {
+    public void driveWithJoystick(double axisNorm, double angVel, double angle) {
                
         double v1, v2, v3, v4;
                
@@ -105,14 +112,15 @@ public class DriveTrain extends Subsystem {
                 double[] speeds = new double[]{ v1, v2, v3, v4 };
                 
                 speeds = LancerFunctions.normalize(speeds);
-                
-                               
+                                        
                 mechanumDrive(speeds[0], speeds[1], speeds[2], speeds[3]);
         }
        
         public void mechanumDrive(double frontLeft, double frontRight, double backLeft, double backRight){
        
                 if(!Robot.isPractice){
+                	((CANTalon) f_left).pidWrite(frontLeft);
+                	
                         ((CANTalon) f_left).set(frontLeft);
                         ((CANTalon) f_right).set(frontRight);
                         ((CANTalon) r_left).set(backLeft);
@@ -124,6 +132,7 @@ public class DriveTrain extends Subsystem {
                         r_right.set(backRight);
                 }
         }
+        
         
         public static void formulateMotorLim(){
         	//TODO: Formulate Motor Limits

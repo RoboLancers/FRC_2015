@@ -33,8 +33,6 @@ public class Robot extends IterativeRobot {
         
         //time for location tracking using built in accelerometer in RegulateSensors
         public static double xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
-        public static Timer timer = new Timer();
-        public static double prevTime = timer.getFGPATimestamp();
         
         //always create OI last
         public static OI oi;
@@ -52,17 +50,15 @@ public class Robot extends IterativeRobot {
                 intake = new Intake();
                 feedback = new Feedback();
                 pneumatics = new Pneumatics();
+                camera = new Camera();
                 
-                try{
-                	//camera = new Camera();
-                }
-                catch(NullPointerException e){}//swallow
+                
                 //Always create OI last
                 oi = new OI();
                
         // instantiate the command used for the autonomous period
                 SmartDashboard.putData(driveTrain);
-               //SmartDashboard.putData(camera);
+                SmartDashboard.putData(camera);
                 SmartDashboard.putData(intake);
                
                 //Autonomous Chooser in the Smart Dashboard

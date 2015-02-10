@@ -1,21 +1,37 @@
 package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.Robot;
+import org.usfirst.frc.team321.util.LancerFunctions;
+import org.usfirst.frc.team321.util.LancerFunctions.Integrator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 
 /**
  *
  */
 public class RegulateSensors extends Command {
 
+	LancerFunctions obj = new LancerFunctions();
+	Integrator xI, yI, zI;
+	Integrator x2I, y2I, z2I;
+	
     public RegulateSensors() {
     	requires(Robot.feedback);
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
+    	xI = obj.new Integrator();
+    	yI = obj.new Integrator();
+    	zI = obj.new Integrator();
+    	x2I = obj.new Integrator();
+    	y2I = obj.new Integrator();
+    	z2I = obj.new Integrator();
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -33,19 +49,18 @@ public class RegulateSensors extends Command {
     	double yAccel = Robot.feedback.accel.getY();
     	double zAccel = Robot.feedback.accel.getZ();
     	
-    	// get change in time (t - to) and reset prevTime (to)
-    	double changeInTime = Robot.timer.getFPGATimestamp() - Robot.prevTime;
-    	Robot.prevTime = Robot.timer.getFPGATimestamp();
+    
+    	//Get the velocity via integration of aceleration
+    	Robot.xVel = xI.getI(xAccel);
+    	Robot.yVel = yI.getI(yAccel);
+    	Robot.zVel = zI.getI(zAccel);
     	
-    	// X = Xo + Vot + (at^2 / 2)
-    	Robot.xLoc = Robot.xLoc + Robot.xVel *  + xAccel * changeInTime * changeInTime / 2;
-    	Robot.yLoc = Robot.yLoc + Robot.yVel *  + yAccel * changeInTime * changeInTime / 2;
-    	Robot.zLoc = Robot.zLoc + Robot.zVel *  + zAccel * changeInTime * changeInTime / 2;
+    	//Get Location via integration of Velocity
+    	Robot.xLoc = x2I.getI(Robot.xVel);
+    	Robot.yLoc = y2I.getI(Robot.yVel);
+    	Robot.zLoc = z2I.getI(Robot.zVel);
     	
-    	// V = Vo + at
-    	Robot.xVel = Robot.xVel + xAccel * changeInTime;
-    	Robot.yVel = Robot.yVel + yAccel * changeInTime;
-    	Robot.zVel = Robot.zVel + zAccel * changeInTime;
+    	
     	SmartDashboard.putNumber("X Location", Robot.xLoc);
     	SmartDashboard.putNumber("Y Location", Robot.yLoc);
     	SmartDashboard.putNumber("Z Location", Robot.zLoc);
