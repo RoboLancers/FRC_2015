@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class IRLockOnDrive extends Command {
 
 	private boolean lastLeft;
-	private LancerPID pid;
 	
     public IRLockOnDrive() {
     	requires(Robot.driveTrain);
@@ -20,7 +19,7 @@ public class IRLockOnDrive extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.driveTrain.driveGyro.reset();
-    	pid = new LancerPID();
+  		Robot.driveTrain.isGyroSteering = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -35,31 +34,28 @@ public class IRLockOnDrive extends Command {
     	if(left && !right){
     		//TODO: Strafe right to correct the robot
     		
-    		Robot.driveTrain.driveWithJoystick(1, 0, 0); //Should make formulateDrive static ?
+    		Robot.driveTrain.driveWithJoystick(0.3, 0, 0);
     		 
     		lastLeft = true;
     	}
     	else if(!left && right){
     		//TODO: Strafe right to correct the robot
     		
-    		Robot.driveTrain.driveWithJoystick(1, 0, Math.PI); //Should make formulateDrive static
+    		Robot.driveTrain.driveWithJoystick(0.3, 0, Math.PI);
     		lastLeft = false;
     	}
     	else if(!left && !right){
-    		//TODO: Rotate until one of the sensors pick up some data
+    		//Rotate until one of the sensors pick up some data
     		if(lastLeft){
     			//Rotate Right
-    			
-    			Robot.driveTrain.driveWithJoystick(1, 0.2, Math.PI/2); //Should make formulateDrive static
-    			
+    			Robot.driveTrain.driveWithJoystick(0, -0.2, 0); //Should make formulateDrive static
     		}else{
     			//Rotate Left
-    			
-    			Robot.driveTrain.driveWithJoystick(1, -0.2, Math.PI/2); //Should make formulateDrive static
-    			
+    			Robot.driveTrain.driveWithJoystick(0, 0.2, 0); //Should make formulateDrive static	
     		}
     	} else {
     		//TODO: Drive Straight
+    		Robot.driveTrain.driveWithJoystick(0.4, 0, Math.PI/2);
     	}
     }
 

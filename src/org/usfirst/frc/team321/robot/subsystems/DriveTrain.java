@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class DriveTrain extends Subsystem {
        
 		
-        //The speed controllers associated with the drive train
+		//The speed controllers associated with the drive train
         public static SpeedController f_left, f_right, r_left, r_right;
        
         public static double[] motorLimit = new double[4];
@@ -39,7 +39,7 @@ public class DriveTrain extends Subsystem {
         public DriveTrain(){
                 super("Drive Train");
                 //Create the speed controller and specify type
-               
+                
                 if(!Robot.isPractice){
                         drivePorts = new int[]{5, 3, 2, 4};
                        
@@ -54,10 +54,10 @@ public class DriveTrain extends Subsystem {
                         ((CANTalon) r_right).changeControlMode(CANTalon.ControlMode.PercentVbus);
                                
                         //Cast the speed controller as a CANTalon and set the pid to the constants above
-                      ((CANTalon) f_left).setPID(kP, kI, kD);
-                      ((CANTalon) f_right).setPID(kP, kI, kD);
-                      ((CANTalon) r_left).setPID(kP, kI, kD);
-                      ((CANTalon) r_right).setPID(kP, kI, kD);
+                        ((CANTalon) f_left).setPID(kP, kI, kD);
+                        ((CANTalon) f_right).setPID(kP, kI, kD);
+                        ((CANTalon) r_left).setPID(kP, kI, kD);
+                        ((CANTalon) r_right).setPID(kP, kI, kD);
                 }else{
                         drivePorts = new int[]{0, 1, 2, 3};
                        
@@ -119,12 +119,11 @@ public class DriveTrain extends Subsystem {
         public void mechanumDrive(double frontLeft, double frontRight, double backLeft, double backRight){
        
                 if(!Robot.isPractice){
-                	((CANTalon) f_left).pidWrite(frontLeft);
                 	
-                        ((CANTalon) f_left).set(frontLeft);
-                        ((CANTalon) f_right).set(frontRight);
-                        ((CANTalon) r_left).set(backLeft);
-                        ((CANTalon) r_right).set(backRight);
+                        ((CANTalon) f_left).pidWrite(frontLeft);
+                        ((CANTalon) f_right).pidWrite(frontRight);
+                        ((CANTalon) r_left).pidWrite(backLeft);
+                        ((CANTalon) r_right).pidWrite(backRight);
                 }else{
                         f_left.set(frontLeft);
                         f_right.set(frontRight);
