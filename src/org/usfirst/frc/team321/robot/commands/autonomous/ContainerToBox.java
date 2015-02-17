@@ -1,16 +1,15 @@
 package org.usfirst.frc.team321.robot.commands.autonomous;
 
-import org.usfirst.frc.team321.robot.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class DualLockOnMoveToBox extends Command {
+public class ContainerToBox extends Command {
 
-    public DualLockOnMoveToBox() {
-    	requires(Robot.driveTrain);
+    public ContainerToBox() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time

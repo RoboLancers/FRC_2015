@@ -1,3 +1,4 @@
+
 package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.Robot;
@@ -16,55 +17,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RegulateSensors extends Command {
 
 	LancerFunctions obj = new LancerFunctions();
+	/*
 	Integrator xI, yI, zI;
 	Integrator x2I, y2I, z2I;
-	
+	*/
     public RegulateSensors() {
     	requires(Robot.feedback);
     }
     
     // Called just before this Command runs the first time
     protected void initialize() {
-    	xI = obj.new Integrator();
+    	/*xI = obj.new Integrator();
     	yI = obj.new Integrator();
     	zI = obj.new Integrator();
     	x2I = obj.new Integrator();
     	y2I = obj.new Integrator();
     	z2I = obj.new Integrator();
+    	*/
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//Infrared Sensor
-    	SmartDashboard.putBoolean("Left IR" ,Robot.feedback.leftIR.get());
-    	SmartDashboard.putBoolean("Right IR" ,Robot.feedback.rightIR.get());
-    	//Accelerometer Sensor
-    	SmartDashboard.putNumber("Accelerometer X", Robot.feedback.accel.getX());
-    	SmartDashboard.putNumber("Accelerometer Y", Robot.feedback.accel.getY());
-    	SmartDashboard.putNumber("Accelerometer Z", Robot.feedback.accel.getZ());
     	
     	
-    	double xAccel = Robot.feedback.accel.getX();
-    	double yAccel = Robot.feedback.accel.getY();
-    	double zAccel = Robot.feedback.accel.getZ();
     	
-    
-    	//Get the velocity via integration of aceleration
-    	Robot.xVel = xI.getI(xAccel);
-    	Robot.yVel = yI.getI(yAccel);
-    	Robot.zVel = zI.getI(zAccel);
-    	
-    	//Get Location via integration of Velocity
-    	Robot.xLoc = x2I.getI(Robot.xVel);
-    	Robot.yLoc = y2I.getI(Robot.yVel);
-    	Robot.zLoc = z2I.getI(Robot.zVel);
-    	
-    	
-    	SmartDashboard.putNumber("X Location", Robot.xLoc);
-    	SmartDashboard.putNumber("Y Location", Robot.yLoc);
-    	SmartDashboard.putNumber("Z Location", Robot.zLoc);
-
     }
 
     // Make this return true when this Command no longer needs to run execute()

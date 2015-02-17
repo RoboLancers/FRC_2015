@@ -2,6 +2,7 @@ package org.usfirst.frc.team321.robot;
 
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
 import org.usfirst.frc.team321.robot.commands.ResetGyro;
+import org.usfirst.frc.team321.robot.commands.SetIntakeLevel;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,22 +15,22 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	public static Joystick driveStick, maniStick;
 	public static JoystickButton[] driveBtn, maniBtn;
-	
+
 	public OI(){
 		driveStick = new Joystick(0);
 		maniStick = new Joystick(1);
-		
+
 		driveBtn = new JoystickButton[12];
 		maniBtn = new JoystickButton[12];
-		
+
 		for(int i = 0; i < driveBtn.length; i++){
 			driveBtn[i] = new JoystickButton(driveStick, i + 1);
 		}
-		
+
 		for(int i = 0; i < maniBtn.length; i++){
 			maniBtn[i] = new JoystickButton(maniStick, i + 1);
 		}
-		
+
 		/*
 		 * Drive Control:
 		 * 		A -- Reset the Gyro angle to its current orientation
@@ -38,13 +39,16 @@ public class OI {
 		 */
 		driveBtn[0].whenReleased(new ResetGyro());
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
-		
+
 		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.intake, Robot.intake.liftSolenoid));
+
+		maniBtn[4].whenReleased(new SetIntakeLevel(1)); //Move the intake up a level
+		maniBtn[2].whenReleased(new SetIntakeLevel(-1)); //Move the intake down a level
 		/*
 		 * 
 		 */
 	}
-	
-	
+
+
 }
 
