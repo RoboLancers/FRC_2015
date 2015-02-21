@@ -2,6 +2,7 @@ package org.usfirst.frc.team321.robot.commands.autonomous;
 
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.util.LancerConstants;
+import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveStraight extends Command {
 
 	private ControlMode mode = ControlMode.PercentVbus;
+	private LancerPID pid = new LancerPID(1,1,1,.01);//Set P I D and e here
 	double angle;
 
 	public DriveStraight() {
@@ -33,7 +35,7 @@ public class DriveStraight extends Command {
 		if(Timer.getMatchTime() < 4.0){
 			Robot.driveTrain.formulateDrive(0.5 * Math.cos(Robot.driveTrain.driveGyro.pidGet()*LancerConstants.deg2Rad), 
 					0.5 * Math.sin(Robot.driveTrain.driveGyro.pidGet() *LancerConstants.deg2Rad), 
-					Math.PI/2,
+					pid.calcPID(angle),//Compensated angle
 					mode);
 		}else{
 			Robot.driveTrain.formulateDrive(0, 0, 0, mode);

@@ -27,9 +27,9 @@ public class LancerPID {
 		this.kP = p;
 		this.kI = i;
 		this.kD = d;
-		this.epsilon = e;
+		this.epsilon = e; //tolerance
 
-		this.ref = 0.0;
+		this.ref = 0.0; //setpoint
 		this.isFirstCycle = true;
 	}
 
@@ -69,14 +69,20 @@ public class LancerPID {
 		}
 
 		//Calculate P
-		double error = this.ref - currentVal;
+		/*Tells the output to try to match the desired value by setting the output equal 
+		 * to the difference between the actual value and the setpoint
+		 * */
+		double error = this.ref - currentVal; 
 		pErr = this.kP * error;
 
 		//Calculate I
+		/*This is the "memory" part. So suppose the motors are going exactly as fast as you want it to be, then the proportion
+		 * term is 0 so the output  becomes 0 */
 		this.errorSum += error;
 		iErr = this.kI * this.errorSum;
 
 		//Calculate D
+		//
 		double delta = currentVal - this.prevVal;
 		dErr = this.kD * delta;
 
