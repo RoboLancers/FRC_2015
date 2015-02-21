@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	public static Feedback feedback;   
 	public static Pneumatics pneumatics;
 
-	public static boolean isPractice = false;
+	public static final boolean isPractice = false;
 
 	//time for location tracking using built in accelerometer in RegulateSensors
 	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;

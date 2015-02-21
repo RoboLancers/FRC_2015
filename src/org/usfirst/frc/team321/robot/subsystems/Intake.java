@@ -46,13 +46,17 @@ public class Intake extends Subsystem {
 		enc = new Encoder(2, 3); //TODO: Set RobotMap constants
 		encController = new PIDController(1, 0, 1, enc, liftMotor);
 		encController.setPercentTolerance(15); //5 percent tolerance 
-
+		encController.enable();
 	} 
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new RegulateIntake());
 	}
-
+	
+	public void levelManipulator(){
+		encController.setSetpoint(kLevelDist);
+	}
+	
 	public void useFeeder(double power){
 		leftWheel.set(power);
 		rightWheel.set(-power);
