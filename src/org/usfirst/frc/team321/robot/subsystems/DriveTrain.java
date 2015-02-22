@@ -71,7 +71,7 @@ public class DriveTrain extends Subsystem {
 
 		driveGyro = new Gyro(RobotMap.driveGyro);
 		driveGyro.reset();
-		
+		Robot.nonResettingGyroVal = driveGyro.getAngle();
 		facingAngle = -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the default facing angle
 
 		isGyroSteering = true;

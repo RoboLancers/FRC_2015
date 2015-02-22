@@ -32,13 +32,16 @@ public class Robot extends IterativeRobot {
 	public static boolean isPractice = false;
 
 	//time for location tracking using built in accelerometer in RegulateSensors
-	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
-
+	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc, nonResettingGyroVal = 0, gyroOffset;
 	//always create OI last
 	public static OI oi;
 
 	public SendableChooser autoChooser;
 
+	
+	public static double getGyroAngle(){
+		return driveTrain.driveGyro.getAngle();
+	}
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
