@@ -56,7 +56,7 @@ public class LancerPID {
 	}
 
 	public double getRef(){ return this.ref; }
-
+	
 	public double calcPID(double currentVal){
 		//PID Error Values
 		double pErr = 0.0;

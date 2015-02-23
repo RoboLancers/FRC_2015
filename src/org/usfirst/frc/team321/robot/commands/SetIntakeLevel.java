@@ -29,7 +29,7 @@ public class SetIntakeLevel extends Command {
 		Robot.intake.lastSetPoint = setPoint;
 		
 		Intake.enc.setPIDSourceParameter(PIDSourceParameter.kDistance);
-		Intake.encController.setSetpoint(setPoint);
+		Intake.encController.setReference(setPoint);
 		
 		Robot.intake.isManual = false;
 	}
@@ -38,10 +38,10 @@ public class SetIntakeLevel extends Command {
 	protected void execute() {
 
 		//if the intake setting becomes manual or the process is finished, stop the process
-		if(Robot.intake.isManual || Intake.encController.onTarget())
+		if(Robot.intake.isManual || Intake.encController.isDone())
 			hasFinished = true;
-
-		Intake.encController.enable();
+		    
+			Intake.encController.setMaxOut(0.0); //Sets max output to 0. so it stops
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -51,7 +51,7 @@ public class SetIntakeLevel extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		Intake.encController.disable();
+		Intake.encController.setMaxOut(0.0);
 	}
 
 	// Called when another command which requires one or more of the same
