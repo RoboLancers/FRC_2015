@@ -5,6 +5,7 @@ import org.usfirst.frc.team321.robot.RobotMap;
 import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
+import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
@@ -25,8 +26,8 @@ public class DriveTrain extends Subsystem {
 
 	//Gyroscope associated with the drive
 	public Gyro driveGyro;
-	public PIDController gyroPID;
-	
+	public LancerPID gyroPID;
+
 	public double facingAngle;
 
 	public boolean isGyroSteering;
@@ -71,7 +72,8 @@ public class DriveTrain extends Subsystem {
 
 		driveGyro = new Gyro(RobotMap.driveGyro);
 		driveGyro.reset();
-		
+		gyroPID = new LancerPID(1, 1, 1, 0.10); //10 percent tolerance
+
 		facingAngle = -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the default facing angle
 
 		isGyroSteering = true;

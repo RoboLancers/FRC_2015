@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveStraight extends Command {
 
 	private ControlMode mode = ControlMode.PercentVbus;
-	private LancerPID pid = new LancerPID(1,1,1,.01);//Set P I D and e here
 	double angle;
 
 	public DriveStraight() {
@@ -27,16 +26,25 @@ public class DriveStraight extends Command {
 		//make sure the set point is now forward
 		Robot.driveTrain.driveGyro.reset();
 		angle = Math.PI/2;
-		pid.setReference(angle);
+		Robot.driveTrain.gyroPID.setReference(angle);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		
+
+		//		if(Timer.getMatchTime() < 4.0){
+		//			Robot.driveTrain.formulateDrive(0.5 * Math.cos(Robot.driveTrain.driveGyro.pidGet()*LancerConstants.deg2Rad), 
+		//					0.5 * Math.sin(Robot.driveTrain.driveGyro.pidGet() *LancerConstants.deg2Rad), 
+		//					pid.calcPID(Robot.driveTrain.driveGyro.pidGet()*LancerConstants.deg2Rad),//Compensated angle
+		//					mode);
+		//		}else{
+		//			Robot.driveTrain.formulateDrive(0, 0, 0, mode);
+		//		}
+
 		if(Timer.getMatchTime() < 4.0){
-			Robot.driveTrain.formulateDrive(0.5 * Math.cos(Robot.driveTrain.driveGyro.pidGet()*LancerConstants.deg2Rad), 
-					0.5 * Math.sin(Robot.driveTrain.driveGyro.pidGet() *LancerConstants.deg2Rad), 
-					pid.calcPID(Robot.driveTrain.driveGyro.pidGet()*LancerConstants.deg2Rad),//Compensated angle
+			Robot.driveTrain.formulateDrive(0.5 * Math.cos(Robot.driveTrain.gyroPID.calcPID(Robot.driveTrain.driveGyro.getAngle())*LancerConstants.deg2Rad), 
+					0.5 * Math.sin(Robot.driveTrain.gyroPID.calcPID(Robot.driveTrain.driveGyro.getAngle()) *LancerConstants.deg2Rad), 
+					Math.PI/2,
 					mode);
 		}else{
 			Robot.driveTrain.formulateDrive(0, 0, 0, mode);

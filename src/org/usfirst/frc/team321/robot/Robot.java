@@ -25,11 +25,12 @@ public class Robot extends IterativeRobot {
 
 	public static DriveTrain driveTrain;
 	public static Camera camera;
-	public static Intake intake;
+	public static ChainLift chainLift;
+	public static Feeder feeder;
 	public static Feedback feedback;   
 	public static Pneumatics pneumatics;
 
-	public static boolean isPractice = false;
+	public static boolean isPractice = true;
 
 	//time for location tracking using built in accelerometer in RegulateSensors
 	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
@@ -47,7 +48,8 @@ public class Robot extends IterativeRobot {
 
 		//initialize all subsystem
 		driveTrain = new DriveTrain();
-		intake = new Intake();
+		chainLift = new ChainLift();
+		feeder = new Feeder();
 		feedback = new Feedback();
 		pneumatics = new Pneumatics();
 		camera = new Camera();
@@ -59,7 +61,8 @@ public class Robot extends IterativeRobot {
 		// instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(camera);
-		SmartDashboard.putData(intake);
+		SmartDashboard.putData(chainLift);
+		SmartDashboard.putData(feeder);
 
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
@@ -116,7 +119,7 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
 		SmartDashboard.putNumber("Gyro Angle", LancerFunctions.getRefAngle(driveTrain.driveGyro.getAngle()));
-		SmartDashboard.putNumber("Intake encoder", intake.enc.getDistance());
+		SmartDashboard.putNumber("Intake encoder", chainLift.enc.getDistance());
 		//Infrared Sensor
     	SmartDashboard.putBoolean("Left IR" ,Robot.feedback.leftIR.get());
     	SmartDashboard.putBoolean("Right IR" ,Robot.feedback.rightIR.get());

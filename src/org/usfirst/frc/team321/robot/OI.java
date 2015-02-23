@@ -1,8 +1,6 @@
 package org.usfirst.frc.team321.robot;
 
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
-import org.usfirst.frc.team321.robot.commands.ResetGyro;
-import org.usfirst.frc.team321.robot.commands.SetIntakeLevel;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -37,13 +35,9 @@ public class OI {
 		 * 		X -- Switch the Drive Configuration: Gyro Based / Traditonal
 		 * 
 		 */
-		driveBtn[0].whenReleased(new ResetGyro());
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
 
-		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.intake, Robot.intake.liftSolenoid));
-
-		maniBtn[4].whenReleased(new SetIntakeLevel(1)); //Move the intake up a level
-		maniBtn[2].whenReleased(new SetIntakeLevel(-1)); //Move the intake down a level
+		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
 		/*
 		 * 
 		 */
