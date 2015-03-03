@@ -1,6 +1,7 @@
 package org.usfirst.frc.team321.robot;
 
 
+import org.usfirst.frc.team321.robot.commands.DriveFacingAngle;
 import org.usfirst.frc.team321.robot.commands.autonomous.*;
 import org.usfirst.frc.team321.robot.subsystems.*;
 import org.usfirst.frc.team321.util.LancerFunctions;
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 		feeder = new Feeder();
 		feedback = new Feedback();
 		pneumatics = new Pneumatics();
-		camera = new Camera();
+		//camera = new Camera();
 
 
 		//Always create OI last
@@ -60,15 +61,15 @@ public class Robot extends IterativeRobot {
 
 		// instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
-		SmartDashboard.putData(camera);
-		SmartDashboard.putData(chainLift);
+		//SmartDashboard.putData(camera);
+		//SmartDashboard.putData(chainLift);
 		SmartDashboard.putData(feeder);
 
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
-		autoChooser.addObject("Drive Forward", new DriveStraight());
-		autoChooser.addObject("IR Strafe", new IRLockOnDrive());
+		autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, 90));
+		autoChooser.addObject("IR Strafe", new IRTotePickUp());
 		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 
 		SmartDashboard.putData("Auto Mode", autoChooser);
@@ -119,18 +120,17 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
 		SmartDashboard.putNumber("Gyro Angle", LancerFunctions.getRefAngle(driveTrain.driveGyro.getAngle()));
-		SmartDashboard.putNumber("Intake encoder", chainLift.enc.getDistance());
-		//Infrared Sensor
-    	SmartDashboard.putBoolean("Left IR" ,Robot.feedback.leftIR.get());
-    	SmartDashboard.putBoolean("Right IR" ,Robot.feedback.rightIR.get());
-    	//Accelerometer Sensor
-    	SmartDashboard.putNumber("Accelerometer X", Robot.feedback.accel.getX());
-    	SmartDashboard.putNumber("Accelerometer Y", Robot.feedback.accel.getY());
-    	SmartDashboard.putNumber("Accelerometer Z", Robot.feedback.accel.getZ());
-    	
-    	SmartDashboard.putNumber("X Location", Robot.xLoc);
-    	SmartDashboard.putNumber("Y Location", Robot.yLoc);
-    	SmartDashboard.putNumber("Z Location", Robot.zLoc);
+
+		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getDistance());
+
+		//Accelerometer Sensor
+		SmartDashboard.putNumber("Accelerometer X", Robot.feedback.accel.getX());
+		SmartDashboard.putNumber("Accelerometer Y", Robot.feedback.accel.getY());
+		SmartDashboard.putNumber("Accelerometer Z", Robot.feedback.accel.getZ());
+
+		SmartDashboard.putNumber("X Location", Robot.xLoc);
+		SmartDashboard.putNumber("Y Location", Robot.yLoc);
+		SmartDashboard.putNumber("Z Location", Robot.zLoc);
 	}
 
 	/**

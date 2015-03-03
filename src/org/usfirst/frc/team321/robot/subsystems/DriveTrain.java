@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -27,8 +28,6 @@ public class DriveTrain extends Subsystem {
 	//Gyroscope associated with the drive
 	public Gyro driveGyro;
 	public LancerPID gyroPID;
-
-	public double facingAngle;
 
 	public boolean isGyroSteering;
 
@@ -72,9 +71,8 @@ public class DriveTrain extends Subsystem {
 
 		driveGyro = new Gyro(RobotMap.driveGyro);
 		driveGyro.reset();
-		gyroPID = new LancerPID(1, 1, 1, 0.10); //10 percent tolerance
-
-		facingAngle = -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the default facing angle
+		gyroPID = new LancerPID(1, 1, 1); //10 percent tolerance
+		gyroPID.setReference(90);		
 
 		isGyroSteering = true;
 
@@ -82,6 +80,11 @@ public class DriveTrain extends Subsystem {
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new MoveWithJoystick());
+	}
+
+	public double getFacingAngle(){
+		return -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2;
+
 	}
 
 	public void formulateDrive(double axisNorm, double angVel, double angle, ControlMode mode) {
@@ -114,13 +117,11 @@ public class DriveTrain extends Subsystem {
 
 	public void formulateDriveGyro(double pow, double angVel, double angle, ControlMode mode){
 
-		facingAngle = -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2; //sets 90 degrees to the forward facing angle
-
 		//No mode because it is the practice chassis or Percentage based control
 		if(mode == null || mode == ControlMode.PercentVbus){
 			double v1, v2, v3, v4;
 
-			double angleToMove = angle - facingAngle + Math.PI / 2;
+			double angleToMove = angle - getFacingAngle() + Math.PI / 2;
 
 			//localize the variables into 4 formulas to be interpreted, as the range goes from [-2, 2] instead of [-1, 1]
 
@@ -134,6 +135,7 @@ public class DriveTrain extends Subsystem {
 			speeds = LancerFunctions.normalize(speeds);
 
 			mechanumDrive(speeds[0], speeds[1], speeds[2], speeds[3]);
+
 		}else if(mode == ControlMode.Speed){
 
 		}
@@ -152,14 +154,5 @@ public class DriveTrain extends Subsystem {
 			r_left.set(backLeft);
 			r_right.set(backRight);
 		}
-	}
-
-	public void moveTowards(double from, double to, double speed) {
-		//TODO: Method sub
-
-	}
-
-	public void rotateTowards(double current, double target, double speed){
-		//TODO: Method sub
 	}
 }

@@ -88,7 +88,7 @@ public class LancerFunctions {
 
 	public static double getRefAngle(double angle){
 		int loops = (int) angle / 360;
-		return angle - loops * 360;
+		return Math.abs(angle - loops * 360);
 	}
 
 }

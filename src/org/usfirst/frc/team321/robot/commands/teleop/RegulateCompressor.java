@@ -1,15 +1,18 @@
-package org.usfirst.frc.team321.robot.commands.autonomous;
+package org.usfirst.frc.team321.robot.commands.teleop;
+
+import org.usfirst.frc.team321.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class ContainerToBox extends Command {
+public class RegulateCompressor extends Command {
 
-    public ContainerToBox() {
+    public RegulateCompressor() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(Robot.pneumatics);
     }
 
     // Called just before this Command runs the first time
@@ -18,6 +21,7 @@ public class ContainerToBox extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.pneumatics.regulateCompressor();
     }
 
     // Make this return true when this Command no longer needs to run execute()

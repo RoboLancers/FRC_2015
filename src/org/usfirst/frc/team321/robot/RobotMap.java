@@ -7,17 +7,20 @@ package org.usfirst.frc.team321.robot;
  */
 public class RobotMap {
 	
-	//Intake Motors
-	public static final int intakeRight = 1;
-	public static final int intakeLeft = 2;
-	//
-	public static final int liftMotor = 0;
+	//PWMS
+	public static final int intakeRight = 8;
+	public static final int intakeLeft = 7;
+	public static final int liftMotor = 9;
 	
+	//Analog Sensors
 	public static final int driveGyro = 0;
 	
-	
+	//Digital Sensors
 	public static final int leftIR = 0;
 	public static final int rightIR = 1;
+	public static final int liftEncA = 2;
+	public static final int liftEncB = 3;
+	public static final int toteDetector = 4;
 	
 	//Double Solenoids
 	public static final int F_LIFT = 1;

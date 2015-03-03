@@ -5,7 +5,7 @@ public class LancerPID {
 	private double kP, kI, kD, epsilon;
 
 	private double ref;
-	private double prevVal, prevD;
+	private double prevVal, prevD,prevT;//added prevT
 	private double errorSum;
 	private double maxOut;
 
@@ -31,6 +31,9 @@ public class LancerPID {
 
 		this.ref = 0.0; //setpoint
 		this.isFirstCycle = true;
+
+		this.cycleCount = 0;
+		this.minCycleCount = 5;
 	}
 
 
@@ -66,6 +69,8 @@ public class LancerPID {
 		if(this.isFirstCycle){
 			this.prevVal = currentVal;
 			this.isFirstCycle = false;
+			this.prevT = System.currentTimeMillis();//Didn't exist
+
 		}
 
 		//Calculate P
@@ -78,12 +83,12 @@ public class LancerPID {
 		//Calculate I
 		/*This is the "memory" part. So suppose the motors are going exactly as fast as you want it to be, then the proportion
 		 * term is 0 so the output  becomes 0 */
-		this.errorSum += error;
+		this.errorSum += 1/2*(error+(ref-prevVal))*(System.currentTimeMillis()-prevT);//this.errorSum+=error
 		iErr = this.kI * this.errorSum;
 
 		//Calculate D
 		//
-		double delta = currentVal - this.prevVal;
+		double delta = (currentVal - this.prevVal)/(System.currentTimeMillis()-prevT);//double delta = currentVal-this.prevVal;
 		dErr = this.kD * delta;
 
 		//Calculate Output

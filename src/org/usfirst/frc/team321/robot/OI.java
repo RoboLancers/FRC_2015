@@ -2,6 +2,7 @@ package org.usfirst.frc.team321.robot;
 
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
+import org.usfirst.frc.team321.robot.commands.UseFeeder;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -31,16 +32,21 @@ public class OI {
 
 		/*
 		 * Drive Control:
-		 * 		A -- Reset the Gyro angle to its current orientation
 		 * 		X -- Switch the Drive Configuration: Gyro Based / Traditonal
 		 * 
 		 */
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
-
-		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
+		
 		/*
-		 * 
+		 * Manipulator Control:
+		 *		7 -- Raise/Lower Chain Lift
+		 * 		8 -- Open/Close Feeder
+		 *
 		 */
+		
+		
+		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
+		maniBtn[7].whenReleased(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
 	}
 
 

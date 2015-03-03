@@ -1,4 +1,4 @@
-package org.usfirst.frc.team321.robot.commands;
+package org.usfirst.frc.team321.robot.commands.teleop;
 
 import org.usfirst.frc.team321.robot.OI;
 import org.usfirst.frc.team321.robot.Robot;
@@ -34,17 +34,17 @@ public class RegulateIntake extends Command {
 				Robot.chainLift.stopIntake();
 		}
 
-		//PID Based methods
-		if(!Robot.chainLift.isRunning){
-			if(OI.maniBtn[4].get()){
-				Robot.chainLift.invokeLevelAdjust(1);
-			}
-			else if(OI.maniBtn[2].get()){
-				Robot.chainLift.invokeLevelAdjust(-1);
-			}
-		}else{
-			Robot.chainLift.moveToSetpoint();
-		}
+//		//PID Based methods
+//		if(!Robot.chainLift.isRunning){
+//			if(OI.maniBtn[4].get()){
+//				Robot.chainLift.invokeLevelAdjust(1);
+//			}
+//			else if(OI.maniBtn[2].get()){
+//				Robot.chainLift.invokeLevelAdjust(-1);
+//			}
+//		}else{
+//			Robot.chainLift.moveToSetpoint();
+//		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

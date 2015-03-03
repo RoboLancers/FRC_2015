@@ -1,7 +1,7 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
 import org.usfirst.frc.team321.robot.RobotMap;
-import org.usfirst.frc.team321.robot.commands.RegulateIntake;
+import org.usfirst.frc.team321.robot.commands.teleop.RegulateIntake;
 import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,16 +18,16 @@ public class ChainLift extends Subsystem {
 	public static SpeedController liftMotor;
 	public static Encoder enc;
 
-	public LancerPID encPID;
+//	public LancerPID encPID;
 
 	public DoubleSolenoid liftSolenoid;
 
 	//The point at which a level is defined (i.e level width to be added to the current point)
 	public static final int kLevelDist = 800; //TODO: Find level constant
-
-	public boolean isManual = false;
-	public boolean isRunning = false;
 	public int lastSetPoint = 0;
+	
+	public boolean isManual = true;
+	public boolean isRunning = false;
 
 	public ChainLift(){
 
@@ -38,8 +38,8 @@ public class ChainLift extends Subsystem {
 		//Default position is upright
 		liftSolenoid.set(DoubleSolenoid.Value.kForward);
 
-		enc = new Encoder(2, 3); //TODO: Set RobotMap constants
-		encPID = new LancerPID(1/800, 0, 1/1600, 0.15);
+		enc = new Encoder(RobotMap.liftEncA, RobotMap.liftEncB); //TODO: Set RobotMap constants
+//		encPID = new LancerPID(1/800, 0, 1/1600, 0.15);
 
 	} 
 
@@ -47,29 +47,29 @@ public class ChainLift extends Subsystem {
 		setDefaultCommand(new RegulateIntake());
 	}
 	
-	public void invokeLevelAdjust(int amt){
-		int setPoint;
+//	public void invokeLevelAdjust(double amt){
+//		int setPoint;
+//
+//		setPoint = (int) (lastSetPoint + (amt * kLevelDist));
+//
+//		//Sets the last set point to be used as a reference for later
+//		lastSetPoint = setPoint;
+//
+//		//enc.setPIDSourceParameter(PIDSourceParameter.kDistance);
+//		encPID.setReference(setPoint);
+//
+//		isManual = false;
+//		isRunning = true;
+//	}
 
-		setPoint = lastSetPoint + (amt * kLevelDist);
-
-		//Sets the last set point to be used as a reference for later
-		lastSetPoint = setPoint;
-
-		//enc.setPIDSourceParameter(PIDSourceParameter.kDistance);
-		encPID.setReference(setPoint);
-
-		isManual = false;
-		isRunning = true;
-	}
-
-	public void moveToSetpoint(){
-		if(!isManual && encPID.isDone()){
-			liftMotor.set(encPID.calcPID(enc.getDistance()));
-			
-		}else{
-			isRunning = false;
-		}
-	}
+//	public void moveToSetpoint(){
+//		if(!isManual && encPID.isDone()){
+//			liftMotor.set(encPID.calcPID(enc.getDistance()));
+//			
+//		}else{
+//			isRunning = false;
+//		}
+//	}
 
 	public void useIntakeManual(double power){
 		isManual = true;

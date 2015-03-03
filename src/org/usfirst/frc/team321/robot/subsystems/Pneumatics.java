@@ -1,6 +1,6 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
-import org.usfirst.frc.team321.robot.commands.RegulateCompressor;
+import org.usfirst.frc.team321.robot.commands.teleop.RegulateCompressor;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.command.Subsystem;
