@@ -2,29 +2,6 @@ package org.usfirst.frc.team321.util;
 
 public class LancerFunctions {
 
-	public class Integrator{
-		double integral;
-		double previous;
-		boolean init = true;
-		double initTime = System.currentTimeMillis();
-
-
-		public double getI(double fx){
-			if(init){
-				integral = fx*(System.currentTimeMillis()-initTime);
-				previous = fx;
-				initTime = System.currentTimeMillis();
-				init = false;
-				return integral;
-			}else{
-				integral = integral + 1/2 * (System.currentTimeMillis()-initTime) * (fx + previous);
-				previous = fx;
-				initTime = System.currentTimeMillis();
-				return integral;
-			}
-		}
-	}
-
 	/*
 	 * Compares a min and a max to the value, and returns the value if within the bounds
 	 * else compares either the min or max, depending on its value
@@ -35,6 +12,13 @@ public class LancerFunctions {
 		if (val.compareTo(min) < 0) return min;
 		else if(val.compareTo(max) > 0) return max;
 		else return val;
+	}
+
+	/*
+	 *
+	 */
+	public static boolean inRange(double val, double min, double max){
+		return (val >= min && val <= max);
 	}
 
 	/*
@@ -88,7 +72,15 @@ public class LancerFunctions {
 
 	public static double getRefAngle(double angle){
 		int loops = (int) angle / 360;
-		return Math.abs(angle - loops * 360);
+
+		if(Math.signum(angle) == -1){
+			return Math.abs(360 + angle - (loops * 360));
+		}
+		return Math.abs(angle - (loops * 360));
+
+		//		if(angle<0){
+		//			return angle % 360;
+		//		}else{return 360 - (Math.abs(angle)%360);}
 	}
 
 }

@@ -31,20 +31,20 @@ public class IRLockOnDrive extends Command {
 
 		//localize variables
 		boolean left, right;
-		left = Robot.feedback.leftIR.get();
-		right = Robot.feedback.rightIR.get(); 
+		left = Robot.feedback.leftVL.get();
+		right = Robot.feedback.rightVL.get(); 
 
 
 		if(!left || !right){
 			if(left && !right){
 				//Strafe left to correct the robot
-				Robot.driveTrain.formulateDrive(0.3, 0, Math.PI, mode);
+				Robot.driveTrain.formulateDrive(0.8, 0, Math.PI, mode);
 				lastLeft = true;
 			}
 			else if(!left && right){
 				//Strafe right to correct the robot
 
-				Robot.driveTrain.formulateDrive(0.3, 0, 0, mode);
+				Robot.driveTrain.formulateDrive(0.8, 0, 0, mode);
 				lastLeft = false;
 			}
 			else if(!left && !right){
@@ -65,7 +65,7 @@ public class IRLockOnDrive extends Command {
 
 		if(left && right){
 			//TODO: Drive Straight
-			Robot.driveTrain.formulateDrive(0.3, 0, Math.PI/2, mode);
+			Robot.driveTrain.formulateDrive(0.5, 0, Math.PI/2, mode);
 
 			onTarget = true;
 			if(startTargetTime == 0){ startTargetTime = Timer.getFPGATimestamp(); }

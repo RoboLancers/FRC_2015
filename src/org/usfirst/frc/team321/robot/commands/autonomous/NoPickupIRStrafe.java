@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class IRTotePickUp extends CommandGroup {
+public class NoPickupIRStrafe extends CommandGroup {
 
-	public  IRTotePickUp() {
+	public  NoPickupIRStrafe() {
 
 		addParallel(new RegulateCompressor()); //Start the compressor
 		
@@ -24,8 +24,6 @@ public class IRTotePickUp extends CommandGroup {
 		addSequential(new IRLockOnDrive(1.0)); //Lock on to the tote
 		addSequential(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid, Value.kReverse)); //Close the Feeder
 		addSequential(new UseFeeder(Feeder.kInward)); //Start the feeder
-		addSequential(new ChainToSetPoint(ChainToSetPoint.TYPE_ABSOLUTE, 400)); //After it hits the button, start using the chain lift
 		addSequential(new DriveFacingAngle(90, 90, 1.3)); //After the chain gets to its set position, drive forward into auto zone
-		addSequential(new ChainToSetPoint(ChainToSetPoint.TYPE_ABSOLUTE, -400)); //Drop the tote
 	}
 }

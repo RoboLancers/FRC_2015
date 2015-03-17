@@ -29,10 +29,10 @@ public class MoveWithJoystick extends Command {
 		double xIn, yIn;
 
 		//15% Tolerance for X and Y Axis
-		xIn = LancerFunctions.deadBand(OI.driveStick.getRawAxis(0), 0.15);
+		xIn = (LancerFunctions.deadBand(OI.driveStick.getRawAxis(0), 0.15));
 		//SmartDashboard.putDouble("xIn", xIn);
 
-		yIn = LancerFunctions.deadBand(OI.driveStick.getRawAxis(1), 0.15);
+		yIn = (LancerFunctions.deadBand(OI.driveStick.getRawAxis(1), 0.15));
 		//SmartDashboard.putDouble("yIn", yIn);
 
 		//get the magnitude of the joystick
@@ -40,7 +40,7 @@ public class MoveWithJoystick extends Command {
 		//get the value of the flexible axis to rotate, this will determine angular velocity
 		double angVel;
 
-		angVel = LancerFunctions.deadBand(OI.driveStick.getRawAxis(4), 0.15);
+		angVel = (LancerFunctions.deadBand(OI.driveStick.getRawAxis(4), 0.15));
 		//SmartDashboard.putDouble("angVel",angVel) ;
 
 		//The angle defined by the cartesian plane transferred into polar coordinates

@@ -2,6 +2,7 @@ package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.util.LancerConstants;
+import org.usfirst.frc.team321.util.LancerFunctions;
 import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
@@ -15,63 +16,69 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveFacingAngle extends Command {
 
+	boolean hasFinished;
+
 	private ControlMode mode = ControlMode.PercentVbus;
 	double moveAngle, facingAngle;
+	double startTime, targetTime;
 
-	public DriveFacingAngle(double moveAngle, double facingAngle) {
+	LancerPID pid;
+
+
+	public DriveFacingAngle(double moveAngle, double facingAngle, double time) {
 		requires(Robot.driveTrain);
 
-		this.moveAngle = -moveAngle + 90;
+		this.moveAngle = moveAngle - 90;
 
 		this.facingAngle = facingAngle * LancerConstants.deg2Rad;
+		
+		this.targetTime = time;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		//make sure the set point is now forward
-		//Robot.driveTrain.gyroPID.setReference(angle);
+
+		pid = new LancerPID(1, 0, 1); // TODO: Set PID Constants
+		pid.setReference(moveAngle);
+		
+
+		startTime = Timer.getFPGATimestamp();
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		double correctedAngle = moveAngle - Robot.driveTrain.driveGyro.pidGet();
 
-		if(Timer.getMatchTime() < 4.0){
-			Robot.driveTrain.formulateDrive(0.5 * Math.cos(correctedAngle * LancerConstants.deg2Rad), 
-					0.5 * Math.sin(correctedAngle * LancerConstants.deg2Rad), 
+		double currentAngle = LancerFunctions.getRefAngle(Robot.driveTrain.driveGyro.getAngle());
+
+		if(Timer.getFPGATimestamp() - startTime < targetTime){
+			Robot.driveTrain.formulateDrive(0.5* Math.cos(pid.calcPID(currentAngle) * LancerConstants.deg2Rad), 
+					0.5 * Math.sin(pid.calcPID(currentAngle) * LancerConstants.deg2Rad), 
 					facingAngle,
 					mode);
 		}else{
 			Robot.driveTrain.formulateDrive(0, 0, 0, mode);
+			hasFinished = true;
 		}
 
-		//		if(Timer.getMatchTime() < 4.0){
-		//			Robot.driveTrain.formulateDrive(0.5 * Math.cos(Robot.driveTrain.gyroPID.calcPID(Robot.driveTrain.driveGyro.getAngle())*LancerConstants.deg2Rad), 
-		//					0.5 * Math.sin(Robot.driveTrain.gyroPID.calcPID(Robot.driveTrain.driveGyro.getAngle()) *LancerConstants.deg2Rad), 
-		//					Math.PI/2,
-		//					mode);
-		//		}else{
-		//			Robot.driveTrain.formulateDrive(0, 0, 0, mode);
-		//		}
-		//
-		//		double error = 90 - Robot.driveTrain.driveGyro.getAngle();
-		//
-		//		SmartDashboard.putNumber("Gyro PID", Robot.driveTrain.gyroPID.calcPID(error));
-		//
+		SmartDashboard.putNumber("Gyro PID", pid.calcPID(Robot.driveTrain.driveGyro.getAngle()));
 
+		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return hasFinished;
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
+		Robot.driveTrain.formulateDrive(0, 0, 0, mode);
 	}
 
 	// Called when another comsmand which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 }

@@ -5,24 +5,30 @@ package org.usfirst.frc.team321.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
-public class RobotMap {
+public class RobotPorts {
+	
+	//RoboRio CAN Ports
+	public static final int kCompressor = 0;
 	
 	//PWMS
-	public static final int intakeRight = 8;
-	public static final int intakeLeft = 7;
-	public static final int liftMotor = 9;
+	public static final int kIntakeRight = 8;
+	public static final int kIntakeLeft = 7;
+	public static final int kLiftMotor = 9;
 	
 	//Analog Sensors
-	public static final int driveGyro = 0;
+	public static final int kDriveGyro = 0;
 	
 	//Digital Sensors
-	public static final int leftIR = 0;
-	public static final int rightIR = 1;
+	public static final int leftVL = 0;
+	public static final int rightVL = 1;
 	public static final int liftEncA = 2;
 	public static final int liftEncB = 3;
-	public static final int toteDetector = 4;
+	public static final int toteDetectorLow = 4;
+	public static final int toteDetectorHigh = 5;
 	
 	//Double Solenoids
 	public static final int F_LIFT = 1;
 	public static final int R_LIFT = 0;
+	public static final int F_FEEDER = 2;
+	public static final int R_FEEDER = 3;
 }

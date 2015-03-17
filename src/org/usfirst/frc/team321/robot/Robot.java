@@ -4,6 +4,7 @@ package org.usfirst.frc.team321.robot;
 import org.usfirst.frc.team321.robot.commands.DriveFacingAngle;
 import org.usfirst.frc.team321.robot.commands.autonomous.*;
 import org.usfirst.frc.team321.robot.subsystems.*;
+import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -31,7 +32,7 @@ public class Robot extends IterativeRobot {
 	public static Feedback feedback;   
 	public static Pneumatics pneumatics;
 
-	public static boolean isPractice = true;
+	public static boolean isPractice = false;
 
 	//time for location tracking using built in accelerometer in RegulateSensors
 	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
@@ -62,22 +63,43 @@ public class Robot extends IterativeRobot {
 		// instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
 		//SmartDashboard.putData(camera);
-		//SmartDashboard.putData(chainLift);
+		SmartDashboard.putData(chainLift);
 		SmartDashboard.putData(feeder);
 
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
-		autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, 90));
-		autoChooser.addObject("IR Strafe", new IRTotePickUp());
+		autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(90, 90, 1.3));
+		autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(90, 90, 3));
+		
+		//autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, 90, 4));
+		autoChooser.addObject("VL Tote Strafe", new IRTotePickUp());
+		autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
+		//autoChooser.addObject("Container Strafe", new PickUpContainer());
+
 		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 
 		SmartDashboard.putData("Auto Mode", autoChooser);
+		
+		driveTrain.driveGyro.initGyro();
+		ChainLift.enc.reset();
 
 	}
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		
+		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		
+		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
+		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
+		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
+		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		
+		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+
+		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
 	}
 
 	public void autonomousInit() {
@@ -117,20 +139,19 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-
+		
+		
+		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		
 		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
-		SmartDashboard.putNumber("Gyro Angle", LancerFunctions.getRefAngle(driveTrain.driveGyro.getAngle()));
+		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
+		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
+		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		
+		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
 
-		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getDistance());
-
-		//Accelerometer Sensor
-		SmartDashboard.putNumber("Accelerometer X", Robot.feedback.accel.getX());
-		SmartDashboard.putNumber("Accelerometer Y", Robot.feedback.accel.getY());
-		SmartDashboard.putNumber("Accelerometer Z", Robot.feedback.accel.getZ());
-
-		SmartDashboard.putNumber("X Location", Robot.xLoc);
-		SmartDashboard.putNumber("Y Location", Robot.yLoc);
-		SmartDashboard.putNumber("Z Location", Robot.zLoc);
+		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
 	}
 
 	/**

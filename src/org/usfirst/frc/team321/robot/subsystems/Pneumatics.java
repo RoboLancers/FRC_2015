@@ -1,5 +1,6 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
+import org.usfirst.frc.team321.robot.RobotPorts;
 import org.usfirst.frc.team321.robot.commands.teleop.RegulateCompressor;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -13,7 +14,7 @@ public class Pneumatics extends Subsystem {
 	public Compressor compressor;
 
 	public Pneumatics(){
-		compressor = new Compressor(0);
+		compressor = new Compressor(RobotPorts.kCompressor);
 
 	}
 	public void initDefaultCommand() {
@@ -22,7 +23,7 @@ public class Pneumatics extends Subsystem {
 
 	public void regulateCompressor(){
 		boolean isError = false;
-		/*
+		
 		//Error Regulations
 		if((compressor.getCompressorCurrentTooHighFault() && !compressor.getCompressorCurrentTooHighStickyFault()) ||
 				(compressor.getCompressorNotConnectedFault() && !compressor.getCompressorNotConnectedStickyFault()) ||
@@ -31,7 +32,7 @@ public class Pneumatics extends Subsystem {
 			isError = true;
 		}else{
 			isError = false;
-		}*/
+		}
 
 		if(!compressor.getPressureSwitchValue() && !compressor.enabled() && !isError){
 			compressor.start();
@@ -39,6 +40,10 @@ public class Pneumatics extends Subsystem {
 		else if((compressor.getPressureSwitchValue() && compressor.enabled()) || isError){
 			compressor.stop();
 		}
+	}
+	
+	public double getPressure(){
+		return compressor.getCompressorCurrent();
 	}
 
 }

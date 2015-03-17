@@ -1,8 +1,14 @@
 package org.usfirst.frc.team321.robot;
 
+import org.usfirst.frc.team321.robot.commands.ChainToSetPoint;
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
+import org.usfirst.frc.team321.robot.commands.UseChainLift;
 import org.usfirst.frc.team321.robot.commands.UseFeeder;
+import org.usfirst.frc.team321.robot.subsystems.ChainLift;
+import org.usfirst.frc.team321.robot.subsystems.Feeder;
+import org.usfirst.frc.team321.robot.triggers.Axis;
+import org.usfirst.frc.team321.robot.triggers.POV;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -36,17 +42,37 @@ public class OI {
 		 * 
 		 */
 		driveBtn[1].whenReleased(new SwitchDriveConfig());
-		
+
 		/*
 		 * Manipulator Control:
+		 * 		1 -- Use Feeder to bring in totes
+		 * 		2 -- Use Feeder to expel totes
+		 * 		
+		 * 		Hat Switch Up -- Raise Chain Lift (Manual)
+		 * 		Hat Switch Down -- Lower Chain Lift (Manual)
+		 * 
 		 *		7 -- Raise/Lower Chain Lift
 		 * 		8 -- Open/Close Feeder
 		 *
 		 */
-		
+
+
+		new Axis(driveStick, 2, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
+		new Axis(driveStick, 3, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
+
+		driveBtn[5].whileHeld(new UseFeeder(Feeder.kInward));
+		driveBtn[4].whileHeld(new UseFeeder(Feeder.kOutward));
+
+//		new POV(maniStick, 0).whileActive(new UseChainLift(ChainLift.kUpward));
+//		new POV(maniStick, 180).whileActive(new UseChainLift(ChainLift.kDownward));
+//
+//		maniBtn[4].whenReleased(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kUpward));
+//		maniBtn[2].whenReleased(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kDownward));
+
+		maniBtn[4].whileHeld(new UseChainLift(ChainLift.kUpward));
+		maniBtn[2].whileHeld(new UseChainLift(ChainLift.kDownward));
 		
 		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
-		maniBtn[7].whenReleased(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
 	}
 
 

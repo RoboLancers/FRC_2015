@@ -2,53 +2,56 @@ package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.robot.subsystems.ChainLift;
+import org.usfirst.frc.team321.util.LancerPID;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ChainToSetPoint extends Command{
-	private double setPoint = 0;
-	private PIDController encPID;
 
-	public ChainToSetPoint(double sp){
+
+	boolean hasFinished;
+	
+	public static final int TYPE_LEVEL = 0, TYPE_ABSOLUTE = 1; 
+
+	LancerPID pid;
+
+	public ChainToSetPoint(double type, int val){
 		requires(Robot.chainLift);
-		this.setPoint = sp;
 
-		encPID = new PIDController(1, 1, 1, ChainLift.enc , ChainLift.liftMotor);
-
-		encPID.setSetpoint(setPoint);
-		encPID.setPercentTolerance(5); //5 Percent Tolerance
-		encPID.enable();//Starts the pid controller
-
+		if(type == TYPE_ABSOLUTE){
+			ChainLift.setSetpoint(val);
+		}
+		else if(type == TYPE_LEVEL){
+			ChainLift.setSetpoint (ChainLift.setPoint + (val * ChainLift.kLevelDist));
+		}
 	}
 
-	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
+		hasFinished = false;
 
+		pid = new LancerPID(1, 0 , 2, 50);
+		pid.setReference(ChainLift.setPoint);
+		pid.resetPrevious();
 	}
 
-	@Override
 	protected void execute() {
-		// TODO Auto-generated method stub
+		Robot.chainLift.useChainLift(pid.calcPID(ChainLift.enc.getRaw()));
+		
+		hasFinished = pid.isDone();
 	}
 
-	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return encPID.onTarget();
+		
+		return hasFinished;
 	}
 
-	@Override
 	protected void end() {
-		encPID.disable();
-		encPID.free(); //Destroys the pid controller
+		Robot.chainLift.useChainLift(ChainLift.kStop);
 	}
 
-	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
+		end();
 	}
 
 

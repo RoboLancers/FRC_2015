@@ -1,16 +1,15 @@
 package org.usfirst.frc.team321.robot.subsystems;
 
 import org.usfirst.frc.team321.robot.Robot;
-import org.usfirst.frc.team321.robot.RobotMap;
+import org.usfirst.frc.team321.robot.RobotPorts;
 import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
-import org.usfirst.frc.team321.util.LancerPID;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -27,7 +26,6 @@ public class DriveTrain extends Subsystem {
 
 	//Gyroscope associated with the drive
 	public Gyro driveGyro;
-	public LancerPID gyroPID;
 
 	public boolean isGyroSteering;
 
@@ -36,6 +34,8 @@ public class DriveTrain extends Subsystem {
 	public double kP = 1.0,
 			kI = 1.0,
 			kD = 1.0;
+
+	public AnalogInput gyroOffsetSwitch;
 
 	public DriveTrain(){
 		super("Drive Train");
@@ -69,22 +69,32 @@ public class DriveTrain extends Subsystem {
 			r_right = new Talon(drivePorts[3]);
 		}
 
-		driveGyro = new Gyro(RobotMap.driveGyro);
-		driveGyro.reset();
-		gyroPID = new LancerPID(1, 1, 1); //10 percent tolerance
-		gyroPID.setReference(90);		
+		gyroOffsetSwitch = new AnalogInput(3);
+
+		driveGyro = new Gyro(RobotPorts.kDriveGyro);
+		//driveGyro.initGyro();
+		//driveGyro.reset();
+		//driveGyro.setSensitivity(.05);
 
 		isGyroSteering = true;
-
 	}
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new MoveWithJoystick());
 	}
 
-	public double getFacingAngle(){
-		return -(LancerFunctions.getRefAngle(driveGyro.getAngle()) * LancerConstants.deg2Rad) + Math.PI / 2;
+	public int getSwitchPos(){
+		if(LancerFunctions.inRange(gyroOffsetSwitch.getVoltage(), 4.82, 5)) return 0;
 
+		return 0;
+	}
+
+	public int getOffsetAngle(){
+		return getSwitchPos() * 45;
+	}
+
+	public double getFacingAngle(){
+		return LancerFunctions.getRefAngle(driveGyro.getAngle() - getOffsetAngle() + 90) * LancerConstants.deg2Rad;
 	}
 
 	public void formulateDrive(double axisNorm, double angVel, double angle, ControlMode mode) {

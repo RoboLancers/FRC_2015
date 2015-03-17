@@ -15,16 +15,13 @@ public class DSolenoidToggle extends Command {
 	Value value = null;
 
 	public DSolenoidToggle(Subsystem sub, DoubleSolenoid ds) {
-		requires(sub);
-		this.ds = ds;
-		value = null;
+		this(sub, ds, null);
 	}
 
 	public DSolenoidToggle(Subsystem sub, DoubleSolenoid ds, Value value){
 		requires(sub);
 		this.ds = ds;
 		this.value = value;
-		hasFinished = true;
 	}
 
 	// Called just before this Command runs the first time
@@ -39,7 +36,7 @@ public class DSolenoidToggle extends Command {
 				ds.set(DoubleSolenoid.Value.kForward);
 			}
 		}else{
-	    	ds.set(value);
+			ds.set(value);
 		}
 		hasFinished = true;
 	}
