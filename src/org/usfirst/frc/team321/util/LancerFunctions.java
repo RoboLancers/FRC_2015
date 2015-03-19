@@ -82,5 +82,14 @@ public class LancerFunctions {
 		//			return angle % 360;
 		//		}else{return 360 - (Math.abs(angle)%360);}
 	}
+	
+	public static double coterminalize(double value, double min, double max){
+		int loops = (int) (value / max);
+
+		if(Math.signum(min) == -1){
+			return Math.abs(max + value - (loops * 360));
+		}
+		return Math.abs(value - (loops * 360));
+	}
 
 }

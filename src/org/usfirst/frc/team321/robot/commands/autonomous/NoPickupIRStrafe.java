@@ -3,7 +3,6 @@ package org.usfirst.frc.team321.robot.commands.autonomous;
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.robot.commands.ChainToSetPoint;
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
-import org.usfirst.frc.team321.robot.commands.DriveFacingAngle;
 import org.usfirst.frc.team321.robot.commands.UseFeeder;
 import org.usfirst.frc.team321.robot.commands.teleop.RegulateCompressor;
 import org.usfirst.frc.team321.robot.subsystems.Feeder;

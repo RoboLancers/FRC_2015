@@ -1,4 +1,5 @@
 package org.usfirst.frc.team321.robot;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -17,6 +18,7 @@ public class RobotPorts {
 	
 	//Analog Sensors
 	public static final int kDriveGyro = 0;
+	public static final int kOffsetSwitch = 2;
 	
 	//Digital Sensors
 	public static final int leftVL = 0;

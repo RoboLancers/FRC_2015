@@ -1,7 +1,6 @@
 package org.usfirst.frc.team321.robot;
 
 
-import org.usfirst.frc.team321.robot.commands.DriveFacingAngle;
 import org.usfirst.frc.team321.robot.commands.autonomous.*;
 import org.usfirst.frc.team321.robot.subsystems.*;
 import org.usfirst.frc.team321.util.LancerConstants;
@@ -32,7 +31,7 @@ public class Robot extends IterativeRobot {
 	public static Feedback feedback;   
 	public static Pneumatics pneumatics;
 
-	public static boolean isPractice = false;
+	public static boolean isPractice = true;
 
 	//time for location tracking using built in accelerometer in RegulateSensors
 	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
@@ -50,10 +49,10 @@ public class Robot extends IterativeRobot {
 
 		//initialize all subsystem
 		driveTrain = new DriveTrain();
-		chainLift = new ChainLift();
-		feeder = new Feeder();
-		feedback = new Feedback();
-		pneumatics = new Pneumatics();
+		//chainLift = new ChainLift();
+		//feeder = new Feeder();
+		//feedback = new Feedback();
+		//pneumatics = new Pneumatics();
 		//camera = new Camera();
 
 
@@ -63,43 +62,63 @@ public class Robot extends IterativeRobot {
 		// instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
 		//SmartDashboard.putData(camera);
-		SmartDashboard.putData(chainLift);
-		SmartDashboard.putData(feeder);
+		//SmartDashboard.putData(chainLift);
+		//SmartDashboard.putData(feeder);
 
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
-		autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(90, 90, 1.3));
-		autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(90, 90, 3));
-		
+		//autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(90, 90, 1.3));
+		//autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(90, 90, 3));
+
 		//autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, 90, 4));
-		autoChooser.addObject("VL Tote Strafe", new IRTotePickUp());
-		autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
+		//autoChooser.addObject("VL Tote Strafe", new IRTotePickUp());
+		//autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
 		//autoChooser.addObject("Container Strafe", new PickUpContainer());
 
 		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 
 		SmartDashboard.putData("Auto Mode", autoChooser);
-		
-		driveTrain.driveGyro.initGyro();
-		ChainLift.enc.reset();
+
+		//driveTrain.driveGyro.initGyro();
+		//ChainLift.enc.reset();
 
 	}
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		
-		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		
-		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
-		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
-		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
-		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
-		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		
-		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
 
-		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+		//SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		//		
+		//SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
+		//SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+		//SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
+		//SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
+		//SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		//		
+		//SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+		//
+		//SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+
+
+		SmartDashboard.putBoolean(  "IMU_Connected",        driveTrain.navX.isConnected());
+		SmartDashboard.putBoolean(  "IMU_IsCalibrating",    driveTrain.navX.isCalibrating());
+		SmartDashboard.putNumber(   "IMU_Yaw",              driveTrain.navX.getYaw());
+		SmartDashboard.putNumber(   "IMU_Pitch",            driveTrain.navX.getPitch());
+		SmartDashboard.putNumber(   "IMU_Roll",             driveTrain.navX.getRoll());
+		SmartDashboard.putNumber(   "IMU_CompassHeading",   driveTrain.navX.getCompassHeading());
+		SmartDashboard.putNumber(   "IMU_Update_Count",     driveTrain.navX.getUpdateCount());
+		SmartDashboard.putNumber(   "IMU_Byte_Count",       driveTrain.navX.getByteCount());
+
+		SmartDashboard.putNumber(   "IMU_Accel_X",          driveTrain.navX.getWorldLinearAccelX());
+		SmartDashboard.putNumber(   "IMU_Accel_Y",          driveTrain.navX.getWorldLinearAccelY());
+		SmartDashboard.putBoolean(  "IMU_IsMoving",         driveTrain.navX.isMoving());
+		SmartDashboard.putNumber(   "IMU_Temp_C",           driveTrain.navX.getTempC());
+
+		SmartDashboard.putNumber(   "Velocity_X",           driveTrain.navX.getVelocityX() );
+		SmartDashboard.putNumber(   "Velocity_Y",           driveTrain.navX.getVelocityY() );
+		SmartDashboard.putNumber(   "Displacement_X",       driveTrain.navX.getDisplacementX() );
+		SmartDashboard.putNumber(   "Displacement_Y",       driveTrain.navX.getDisplacementY() );
 	}
 
 	public void autonomousInit() {
@@ -139,19 +158,19 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		
-		
-		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		
-		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
-		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
-		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
-		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
-		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		
-		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
 
-		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+		//		
+		//		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		//		
+		//		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
+		//		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+		//		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
+		//		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
+		//		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
+		//		
+		//		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+		//
+		//		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
 	}
 
 	/**

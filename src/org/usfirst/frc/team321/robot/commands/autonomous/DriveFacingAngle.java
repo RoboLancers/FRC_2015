@@ -1,4 +1,4 @@
-package org.usfirst.frc.team321.robot.commands;
+package org.usfirst.frc.team321.robot.commands.autonomous;
 
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.util.LancerConstants;
@@ -40,6 +40,7 @@ public class DriveFacingAngle extends Command {
 
 		pid = new LancerPID(1, 0, 1); // TODO: Set PID Constants
 		pid.setReference(moveAngle);
+		pid.setContinuous(0, 360);
 		
 
 		startTime = Timer.getFPGATimestamp();
@@ -49,7 +50,7 @@ public class DriveFacingAngle extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 
-		double currentAngle = LancerFunctions.getRefAngle(Robot.driveTrain.driveGyro.getAngle());
+		double currentAngle = LancerFunctions.getRefAngle(Robot.driveTrain.navX.getYaw());
 
 		if(Timer.getFPGATimestamp() - startTime < targetTime){
 			Robot.driveTrain.formulateDrive(0.5* Math.cos(pid.calcPID(currentAngle) * LancerConstants.deg2Rad), 

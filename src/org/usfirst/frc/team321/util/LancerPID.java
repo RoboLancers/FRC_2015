@@ -11,6 +11,10 @@ public class LancerPID {
 	private	boolean isFirstCycle;
 	private int cycleCount, minCycleCount;
 
+	private boolean isContinuous;
+	private double midPoint;
+	private double minInput, maxInput;
+
 	//Blank Constructor: Remember, The PID will not increment for the output
 	public LancerPID(){
 		this(0.0, 0.0, 0.0, 0.0);
@@ -33,14 +37,38 @@ public class LancerPID {
 
 		this.cycleCount = 0;
 		this.minCycleCount = 5;
-	}
 
+		this.isContinuous = false;
+		this.midPoint = 0.0;
+		this.minInput = 0.0;
+		this.maxInput = 0.0;
+	}
 
 	public void setTolerance(double t){ this.tolerance = t; }
 
 	public void setReference(double ref){ this.ref = ref; }
 
 	public void setMinCycleCount(int count){ this.minCycleCount = count; }
+
+	/* Set Continuous makes it so that two points are calculated as the same point.
+	 * The proportion is based off of the distance from the midpoint to the two points.
+	 */
+
+	public void setContinuous(double min, double max){
+		midPoint = (max - min) / 2; //midpoint is the averages of the two values
+
+		maxInput = max;
+		minInput = min;
+
+		isContinuous = true;
+	}
+
+	public void resetContinuous(){
+		isContinuous = false;
+		midPoint = 0.0;
+		minInput = 0.0;
+		maxInput = 0.0;
+	}
 
 	public void resetErrorSum(){ this.errorSum = 0.0; }
 
@@ -61,7 +89,19 @@ public class LancerPID {
 		/*Tells the output to try to match the desired value by setting the output equal 
 		 * to the difference between the actual value and the setpoint
 		 * */
-		double error = this.ref - currentVal; 
+		double error = 0;
+
+		if(!isContinuous){
+			error = this.ref - currentVal; 
+		}else{
+			if(currentVal - midPoint > 0){ //On the upper half of the curve
+				error = this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput);
+			}
+			else if(currentVal - midPoint < 0){ // On the lower half of the curve
+				error = - (this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput));
+			}
+		}
+
 		pErr = this.kP * error;
 
 		//Calculate I
@@ -100,7 +140,20 @@ public class LancerPID {
 		pErr = this.kP * delta;
 
 		//Calculate I
-		double error = this.ref - currentVal;
+
+		double error = 0;
+		
+		if(!isContinuous){
+			error = this.ref - currentVal; 
+		}else{
+			if(currentVal - midPoint > 0){ //On the upper half of the curve
+				error = this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput);
+			}
+			else if(currentVal - midPoint < 0){ // On the lower half of the curve
+				error = - (this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput));
+			}
+		}
+		
 		iErr = this.kI * error;
 
 		//Calculate D

@@ -6,26 +6,33 @@ import org.usfirst.frc.team321.robot.commands.MoveWithJoystick;
 import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
 
+import com.kauailabs.navx_mxp.AHRS;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public class DriveTrain extends Subsystem {
 
-
+	SerialPort navXSerial;
+	byte update_rate_hz = 50;
+	
 	//The speed controllers associated with the drive train
 	public static SpeedController f_left, f_right, r_left, r_right;
 
 	//Gyroscope associated with the drive
 	public Gyro driveGyro;
+	
+	//NavX 9 Axis Navigational Sensor
+	public AHRS navX;
 
 	public boolean isGyroSteering;
 
@@ -69,14 +76,21 @@ public class DriveTrain extends Subsystem {
 			r_right = new Talon(drivePorts[3]);
 		}
 
-		gyroOffsetSwitch = new AnalogInput(3);
+		gyroOffsetSwitch = new AnalogInput(RobotPorts.kOffsetSwitch);
 
-		driveGyro = new Gyro(RobotPorts.kDriveGyro);
+		//driveGyro = new Gyro(RobotPorts.kDriveGyro);
 		//driveGyro.initGyro();
 		//driveGyro.reset();
 		//driveGyro.setSensitivity(.05);
+		//isGyroSteering = true;
 
-		isGyroSteering = true;
+		try{
+			navXSerial = new SerialPort(57600, SerialPort.Port.kMXP);
+			navX = new AHRS(navXSerial, update_rate_hz);
+			
+		} catch( Exception e) {
+			//swallow the exception
+		}
 	}
 
 	public void initDefaultCommand() {
@@ -94,7 +108,7 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public double getFacingAngle(){
-		return LancerFunctions.getRefAngle(driveGyro.getAngle() - getOffsetAngle() + 90) * LancerConstants.deg2Rad;
+		return LancerFunctions.getRefAngle(navX.getYaw() - getOffsetAngle() + 90) * LancerConstants.deg2Rad;
 	}
 
 	public void formulateDrive(double axisNorm, double angVel, double angle, ControlMode mode) {
