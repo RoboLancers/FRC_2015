@@ -16,12 +16,12 @@ public class RobotPorts {
 	public static final int kIntakeLeft = 7;
 	public static final int kLiftMotor = 9;
 	
-	//Analog Sensors
-	public static final int kDriveGyro = 0;
-	public static final int kOffsetSwitch = 2;
-	
+	//Analog Sensors (Unused)
+//	public static final int kDriveGyro = 0;
+//	public static final int kOffsetSwitch = 2;
+//	
 	//Digital Sensors
-	public static final int leftVL = 0;
+	public static final int leftVL = 0;	
 	public static final int rightVL = 1;
 	public static final int liftEncA = 2;
 	public static final int liftEncB = 3;
@@ -33,4 +33,9 @@ public class RobotPorts {
 	public static final int R_LIFT = 0;
 	public static final int F_FEEDER = 2;
 	public static final int R_FEEDER = 3;
+	public static final int F_GRABBER = 4;
+	public static final int R_GRABBER = 5;
+	public static final int F_EXTENTION = 6;
+	public static final int R_EXTENTION = 7;
+	
 }

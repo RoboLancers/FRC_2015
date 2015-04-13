@@ -7,27 +7,24 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class SwitchDriveConfig extends Command {
+public class ResetYaw extends Command {
 
-	private boolean hasFinished = false;
-	
-    public SwitchDriveConfig() {
+    public ResetYaw() {
     	requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.driveTrain.isFieldCentric = !Robot.driveTrain.isFieldCentric;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	hasFinished = true;
+    	Robot.driveTrain.navX.zeroYaw();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return hasFinished;
+        return true;
     }
 
     // Called once after isFinished returns true

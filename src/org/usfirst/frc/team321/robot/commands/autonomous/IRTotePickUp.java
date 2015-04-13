@@ -24,7 +24,7 @@ public class IRTotePickUp extends CommandGroup {
 		addSequential(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid, Value.kReverse)); //Close the Feeder
 		addSequential(new UseFeeder(Feeder.kInward)); //Start the feeder
 		addSequential(new ChainToSetPoint(ChainToSetPoint.TYPE_ABSOLUTE, 400)); //After it hits the button, start using the chain lift
-		addSequential(new DriveFacingAngle(90, 90, 1.3)); //After the chain gets to its set position, drive forward into auto zone
+		addSequential(new DriveFacingAngle(0.5 ,270, 3 * Math.PI/2, 1.3)); //After the chain gets to its set position, drive forward into auto zone
 		addSequential(new ChainToSetPoint(ChainToSetPoint.TYPE_ABSOLUTE, -400)); //Drop the tote
 	}
 }

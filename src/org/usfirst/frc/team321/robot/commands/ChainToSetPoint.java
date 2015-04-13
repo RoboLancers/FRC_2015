@@ -2,52 +2,58 @@ package org.usfirst.frc.team321.robot.commands;
 
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.robot.subsystems.ChainLift;
-import org.usfirst.frc.team321.util.LancerPID;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ChainToSetPoint extends Command{
 
 
-	boolean hasFinished;
-	
-	public static final int TYPE_LEVEL = 0, TYPE_ABSOLUTE = 1; 
+	private boolean isFirstPass = true;
+	private double type, val;
 
-	LancerPID pid;
+	public static final int TYPE_LEVEL = 0, TYPE_ABSOLUTE = 1; 
 
 	public ChainToSetPoint(double type, int val){
 		requires(Robot.chainLift);
-
-		if(type == TYPE_ABSOLUTE){
-			ChainLift.setSetpoint(val);
-		}
-		else if(type == TYPE_LEVEL){
-			ChainLift.setSetpoint (ChainLift.setPoint + (val * ChainLift.kLevelDist));
-		}
+		this.type = type;
+		this.val = val;
 	}
 
 	protected void initialize() {
-		hasFinished = false;
 
-		pid = new LancerPID(1, 0 , 2, 50);
-		pid.setReference(ChainLift.setPoint);
-		pid.resetPrevious();
+	}
+	
+	protected void onFirstPass(){
+		Robot.chainLift.chainPID.resetErrorSum(); //Reset Integral
+		Robot.chainLift.chainPID.resetPrevious(); //Reset Derivitave
+		Robot.chainLift.setPoint += (val * ChainLift.kLevelDist);
+		
+		//Set Setpoint
+		if(this.type == TYPE_ABSOLUTE){
+			Robot.chainLift.chainPID.setReference(val);
+		}
+		else if(this.type == TYPE_LEVEL){
+			Robot.chainLift.chainPID.setReference(Robot.chainLift.setPoint);
+		}
+		isFirstPass = false;
 	}
 
 	protected void execute() {
-		Robot.chainLift.useChainLift(pid.calcPID(ChainLift.enc.getRaw()));
+		if(isFirstPass){
+			onFirstPass();
+		}
 		
-		hasFinished = pid.isDone();
+		Robot.chainLift.useChainLift(Robot.chainLift.chainPID.calcPID(ChainLift.enc.getRaw()));
 	}
 
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		
-		return hasFinished;
+
+		return Robot.chainLift.chainPID.isDone();
 	}
 
 	protected void end() {
 		Robot.chainLift.useChainLift(ChainLift.kStop);
+		isFirstPass = true; //reset first pass
 	}
 
 	protected void interrupted() {

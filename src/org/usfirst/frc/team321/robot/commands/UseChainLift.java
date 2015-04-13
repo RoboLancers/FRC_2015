@@ -1,5 +1,6 @@
 package org.usfirst.frc.team321.robot.commands;
 
+import org.usfirst.frc.team321.robot.OI;
 import org.usfirst.frc.team321.robot.Robot;
 import org.usfirst.frc.team321.robot.subsystems.ChainLift;
 
@@ -26,7 +27,7 @@ public class UseChainLift extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if(Math.signum(dir) == ChainLift.kUpward){ //Going Upwards
-			if(Robot.feedback.toteDetectorHigh.get()){ //if the tote is at the top of th elevel, end the command
+			if(Robot.feedback.toteDetectorHigh.get() && !OI.maniBtn[0].get()){ //if the tote is at the top of th elevel, end the command
 				hasFinished = true;
 			}else{
 				Robot.chainLift.useChainLift(dir);

@@ -89,16 +89,16 @@ public class LancerPID {
 		/*Tells the output to try to match the desired value by setting the output equal 
 		 * to the difference between the actual value and the setpoint
 		 * */
-		double error = 0;
 
-		if(!isContinuous){
-			error = this.ref - currentVal; 
-		}else{
-			if(currentVal - midPoint > 0){ //On the upper half of the curve
-				error = this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput);
-			}
-			else if(currentVal - midPoint < 0){ // On the lower half of the curve
-				error = - (this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput));
+		double error = this.ref - currentVal;
+
+		if (isContinuous) {
+			if (Math.abs(error) > midPoint) {
+				if (error > 0) {
+					error = error - maxInput + minInput;
+				} else {
+					error = error + maxInput - minInput;
+				}
 			}
 		}
 
@@ -141,19 +141,17 @@ public class LancerPID {
 
 		//Calculate I
 
-		double error = 0;
-		
-		if(!isContinuous){
-			error = this.ref - currentVal; 
-		}else{
-			if(currentVal - midPoint > 0){ //On the upper half of the curve
-				error = this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput);
-			}
-			else if(currentVal - midPoint < 0){ // On the lower half of the curve
-				error = - (this.ref - LancerFunctions.coterminalize(currentVal, minInput, maxInput));
+		double error = this.ref - currentVal;
+		if (isContinuous) {
+			if (Math.abs(error) > midPoint) {
+				if (error > 0) {
+					error = error - maxInput + minInput;
+				} else {
+					error = error + maxInput - minInput;
+				}
 			}
 		}
-		
+
 		iErr = this.kI * error;
 
 		//Calculate D

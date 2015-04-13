@@ -1,11 +1,22 @@
 package org.usfirst.frc.team321.robot;
 
 
-import org.usfirst.frc.team321.robot.commands.autonomous.*;
-import org.usfirst.frc.team321.robot.subsystems.*;
+import org.usfirst.frc.team321.robot.commands.TwoCanAuto;
+import org.usfirst.frc.team321.robot.commands.autonomous.DriveFacingAngle;
+import org.usfirst.frc.team321.robot.commands.autonomous.NoPickupIRStrafe;
+import org.usfirst.frc.team321.robot.subsystems.Camera;
+import org.usfirst.frc.team321.robot.subsystems.ChainLift;
+import org.usfirst.frc.team321.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team321.robot.subsystems.Feedback;
+import org.usfirst.frc.team321.robot.subsystems.Feeder;
+import org.usfirst.frc.team321.robot.subsystems.Grabber;
+import org.usfirst.frc.team321.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team321.util.LancerConstants;
 import org.usfirst.frc.team321.util.LancerFunctions;
 
+import com.kauailabs.navx_mxp.AHRS;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -30,11 +41,9 @@ public class Robot extends IterativeRobot {
 	public static Feeder feeder;
 	public static Feedback feedback;   
 	public static Pneumatics pneumatics;
+	public static Grabber grabber;
 
-	public static boolean isPractice = true;
-
-	//time for location tracking using built in accelerometer in RegulateSensors
-	public static double xAccel = 0, yAccel = 0, zAccel = 0, xVel = 0, yVel = 0, zVel = 0, xLoc, yLoc, zLoc;
+	public static boolean isPractice = false;
 
 	//always create OI last
 	public static OI oi;
@@ -49,10 +58,11 @@ public class Robot extends IterativeRobot {
 
 		//initialize all subsystem
 		driveTrain = new DriveTrain();
-		//chainLift = new ChainLift();
-		//feeder = new Feeder();
-		//feedback = new Feedback();
-		//pneumatics = new Pneumatics();
+		chainLift = new ChainLift();
+		feeder = new Feeder();
+		feedback = new Feedback();
+		pneumatics = new Pneumatics();
+		//grabber = new Grabber();
 		//camera = new Camera();
 
 
@@ -61,64 +71,74 @@ public class Robot extends IterativeRobot {
 
 		// instantiate the command used for the autonomous period
 		SmartDashboard.putData(driveTrain);
+		SmartDashboard.putData(chainLift);
+		SmartDashboard.putData(feeder);
+		//SmartDashboard.putData(grabber);
 		//SmartDashboard.putData(camera);
-		//SmartDashboard.putData(chainLift);
-		//SmartDashboard.putData(feeder);
 
 		//Autonomous Chooser in the Smart Dashboard
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Autonomous", null);
-		//autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(90, 90, 1.3));
-		//autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(90, 90, 3));
+		autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(0.75, 90, Math.PI/2, 0.8));
+		autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(0.5, 90, Math.PI/2, 3.05));
+		//		autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
+		//		autoChooser.addObject("TWO (2) CAN STEAL", new TwoCanAuto());
 
-		//autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, 90, 4));
-		//autoChooser.addObject("VL Tote Strafe", new IRTotePickUp());
-		//autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
-		//autoChooser.addObject("Container Strafe", new PickUpContainer());
+		//		autoChooser.addObject("Container Strafe", new PickUpContainer());
+		//		autoChooser.addObject("3 Tote Autonomous", new ThreeToteAuto());
+
+		//		autoChooser.addObject("Drive Forward", new DriveFacingAngle(90, Math.PI/2, 4));
+		//		autoChooser.addObject("Strafe Left", new DriveFacingAngle(180, Math.PI/2, 4));
+		//		autoChooser.addObject("Strafe Right", new DriveFacingAngle(0, Math.PI/2, 4));
+		//		autoChooser.addObject("VL Tote Strafe", new IRTotePickUp());
 
 		//autoChooser.addObject("Name of Autonomous", new AutoCommand());
 
 		SmartDashboard.putData("Auto Mode", autoChooser);
 
-		//driveTrain.driveGyro.initGyro();
-		//ChainLift.enc.reset();
+		ChainLift.enc.reset();
+
+		driveTrain.navX.zeroYaw();
+		((AHRS)driveTrain.navX).resetDisplacement();
 
 	}
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 
-		//SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		//		
-		//SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
-		//SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
-		//SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
-		//SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
-		//SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		//		
-		//SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
-		//
-		//SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+		SmartDashboard.putBoolean("Field Centric", driveTrain.isFieldCentric);
+		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+
+		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+
+		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
 
 
 		SmartDashboard.putBoolean(  "IMU_Connected",        driveTrain.navX.isConnected());
 		SmartDashboard.putBoolean(  "IMU_IsCalibrating",    driveTrain.navX.isCalibrating());
 		SmartDashboard.putNumber(   "IMU_Yaw",              driveTrain.navX.getYaw());
-		SmartDashboard.putNumber(   "IMU_Pitch",            driveTrain.navX.getPitch());
-		SmartDashboard.putNumber(   "IMU_Roll",             driveTrain.navX.getRoll());
-		SmartDashboard.putNumber(   "IMU_CompassHeading",   driveTrain.navX.getCompassHeading());
-		SmartDashboard.putNumber(   "IMU_Update_Count",     driveTrain.navX.getUpdateCount());
-		SmartDashboard.putNumber(   "IMU_Byte_Count",       driveTrain.navX.getByteCount());
 
-		SmartDashboard.putNumber(   "IMU_Accel_X",          driveTrain.navX.getWorldLinearAccelX());
-		SmartDashboard.putNumber(   "IMU_Accel_Y",          driveTrain.navX.getWorldLinearAccelY());
-		SmartDashboard.putBoolean(  "IMU_IsMoving",         driveTrain.navX.isMoving());
-		SmartDashboard.putNumber(   "IMU_Temp_C",           driveTrain.navX.getTempC());
 
-		SmartDashboard.putNumber(   "Velocity_X",           driveTrain.navX.getVelocityX() );
-		SmartDashboard.putNumber(   "Velocity_Y",           driveTrain.navX.getVelocityY() );
-		SmartDashboard.putNumber(   "Displacement_X",       driveTrain.navX.getDisplacementX() );
-		SmartDashboard.putNumber(   "Displacement_Y",       driveTrain.navX.getDisplacementY() );
+		//		SmartDashboard.putNumber(   "IMU_Pitch",            driveTrain.navX.getPitch());
+		//		SmartDashboard.putNumber(   "IMU_Roll",             driveTrain.navX.getRoll());
+		//		SmartDashboard.putNumber(   "IMU_CompassHeading",   driveTrain.navX.getCompassHeading());
+		//		SmartDashboard.putNumber(   "IMU_Update_Count",     driveTrain.navX.getUpdateCount());
+		//		SmartDashboard.putNumber(   "IMU_Byte_Count",       driveTrain.navX.getByteCount());
+		//
+		//		SmartDashboard.putNumber(   "IMU_Accel_X",       	((AHRS) driveTrain.navX).getWorldLinearAccelX());
+		//		SmartDashboard.putNumber(   "IMU_Accel_Y",        	((AHRS) driveTrain.navX).getWorldLinearAccelY());
+		//		SmartDashboard.putBoolean(  "IMU_IsMoving",         ((AHRS) driveTrain.navX).isMoving());
+		//		SmartDashboard.putNumber(   "IMU_Temp_C",           ((AHRS) driveTrain.navX).getTempC());
+
+		SmartDashboard.putNumber(   "Velocity_X",           ((AHRS) driveTrain.navX).getVelocityX() );
+		SmartDashboard.putNumber(   "Velocity_Y",           ((AHRS) driveTrain.navX).getVelocityY() );
+		SmartDashboard.putNumber(   "Displacement_X : Meters",       ((AHRS) driveTrain.navX).getDisplacementX() );
+		SmartDashboard.putNumber(   "Displacement_Y : Meters",       ((AHRS) driveTrain.navX).getDisplacementY() );
+		SmartDashboard.putNumber(   "Displacement_X : Feet",       ((AHRS) driveTrain.navX).getDisplacementX() * LancerConstants.meterToFeet);
+		SmartDashboard.putNumber(   "Displacement_Y : Feet",       ((AHRS) driveTrain.navX).getDisplacementY() * LancerConstants.meterToFeet);
+
+		SmartDashboard.putNumber("Facing Angle", driveTrain.getFacingAngle() * LancerConstants.rad2Deg);
+		SmartDashboard.putBoolean("Chain Lift UP", chainLift.liftSolenoid.get() == Value.kForward ? true : false);
 	}
 
 	public void autonomousInit() {
@@ -159,18 +179,36 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		//		
-		//		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		//		
-		//		SmartDashboard.putBoolean("Gyro Enabled", driveTrain.isGyroSteering);
-		//		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
-		//		SmartDashboard.putNumber("offsetSwitch", driveTrain.getOffsetAngle());
-		//		SmartDashboard.putNumber("offsetSwitchVoltage", driveTrain.gyroOffsetSwitch.getAverageVoltage());
-		//		SmartDashboard.putNumber("Gyro Value", driveTrain.driveGyro.getAngle());
-		//		
-		//		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+		SmartDashboard.putBoolean("Field Centric", driveTrain.isFieldCentric);
+		SmartDashboard.putNumber("Facing Angle", LancerFunctions.getRefAngle(driveTrain.getFacingAngle() * LancerConstants.rad2Deg));
+
+		SmartDashboard.putNumber("Intake encoder", ChainLift.enc.getRaw());
+
+		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+		SmartDashboard.putBoolean("Chain Lift UP", chainLift.liftSolenoid.get() == Value.kForward ? true : false);
+
+		SmartDashboard.putBoolean(  "IMU_Connected",        driveTrain.navX.isConnected());
+		SmartDashboard.putBoolean(  "IMU_IsCalibrating",    driveTrain.navX.isCalibrating());
+		SmartDashboard.putNumber(   "IMU_Yaw",              driveTrain.navX.getYaw());
+		//		SmartDashboard.putNumber(   "IMU_Pitch",            driveTrain.navX.getPitch());
+		//		SmartDashboard.putNumber(   "IMU_Roll",             driveTrain.navX.getRoll());
+		//		SmartDashboard.putNumber(   "IMU_CompassHeading",   driveTrain.navX.getCompassHeading());
+		//		SmartDashboard.putNumber(   "IMU_Update_Count",     driveTrain.navX.getUpdateCount());
+		//		SmartDashboard.putNumber(   "IMU_Byte_Count",       driveTrain.navX.getByteCount());
 		//
-		//		SmartDashboard.putNumber("Compressor", pneumatics.getPressure());
+		//		SmartDashboard.putNumber(   "IMU_Accel_X",       	((AHRS) driveTrain.navX).getWorldLinearAccelX());
+		//		SmartDashboard.putNumber(   "IMU_Accel_Y",        	((AHRS) driveTrain.navX).getWorldLinearAccelY());
+		//		SmartDashboard.putBoolean(  "IMU_IsMoving",         ((AHRS) driveTrain.navX).isMoving());
+		//		SmartDashboard.putNumber(   "IMU_Temp_C",           ((AHRS) driveTrain.navX).getTempC());
+		//
+
+		SmartDashboard.putNumber(   "Velocity_X",           ((AHRS) driveTrain.navX).getVelocityX() );
+		SmartDashboard.putNumber(   "Velocity_Y",           ((AHRS) driveTrain.navX).getVelocityY() );
+		SmartDashboard.putNumber(   "Displacement_X : Meters",       ((AHRS) driveTrain.navX).getDisplacementX() );
+		SmartDashboard.putNumber(   "Displacement_Y : Meters",       ((AHRS) driveTrain.navX).getDisplacementY() );
+		SmartDashboard.putNumber(   "Displacement_X : Feet",       ((AHRS) driveTrain.navX).getDisplacementX() * LancerConstants.meterToFeet);
+		SmartDashboard.putNumber(   "Displacement_Y : Feet",       ((AHRS) driveTrain.navX).getDisplacementY() * LancerConstants.meterToFeet);
+
 	}
 
 	/**

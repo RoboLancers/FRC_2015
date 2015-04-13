@@ -56,7 +56,7 @@ public class MoveWithJoystick extends Command {
 		}
 
 		//Field Centric Steering
-		if(Robot.driveTrain.isGyroSteering)
+		if(Robot.driveTrain.isFieldCentric)
 			Robot.driveTrain.formulateDriveGyro(axisNormalized, angVel, angle, Robot.isPractice ? null : CANTalon.ControlMode.PercentVbus);
 		else
 			Robot.driveTrain.formulateDrive(axisNormalized, angVel, angle, Robot.isPractice ? null : CANTalon.ControlMode.PercentVbus);

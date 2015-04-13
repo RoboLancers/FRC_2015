@@ -2,13 +2,13 @@ package org.usfirst.frc.team321.robot;
 
 import org.usfirst.frc.team321.robot.commands.ChainToSetPoint;
 import org.usfirst.frc.team321.robot.commands.DSolenoidToggle;
+import org.usfirst.frc.team321.robot.commands.ResetYaw;
 import org.usfirst.frc.team321.robot.commands.SwitchDriveConfig;
 import org.usfirst.frc.team321.robot.commands.UseChainLift;
 import org.usfirst.frc.team321.robot.commands.UseFeeder;
 import org.usfirst.frc.team321.robot.subsystems.ChainLift;
 import org.usfirst.frc.team321.robot.subsystems.Feeder;
 import org.usfirst.frc.team321.robot.triggers.Axis;
-import org.usfirst.frc.team321.robot.triggers.POV;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -41,7 +41,7 @@ public class OI {
 		 * 		X -- Switch the Drive Configuration: Gyro Based / Traditonal
 		 * 
 		 */
-		driveBtn[1].whenReleased(new SwitchDriveConfig());
+		driveBtn[1].whenPressed(new SwitchDriveConfig());
 
 		/*
 		 * Manipulator Control:
@@ -55,24 +55,29 @@ public class OI {
 		 * 		8 -- Open/Close Feeder
 		 *
 		 */
-//
-//
-//		new Axis(driveStick, 2, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
-//		new Axis(driveStick, 3, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
-//
-//		driveBtn[5].whileHeld(new UseFeeder(Feeder.kInward));
-//		driveBtn[4].whileHeld(new UseFeeder(Feeder.kOutward));
 
-//		new POV(maniStick, 0).whileActive(new UseChainLift(ChainLift.kUpward));
-//		new POV(maniStick, 180).whileActive(new UseChainLift(ChainLift.kDownward));
-//
-//		maniBtn[4].whenReleased(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kUpward));
-//		maniBtn[2].whenReleased(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kDownward));
-//
-//		maniBtn[4].whileHeld(new UseChainLift(ChainLift.kUpward));
-//		maniBtn[2].whileHeld(new UseChainLift(ChainLift.kDownward));
-//		
-//		maniBtn[6].whenReleased(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
+
+		new Axis(driveStick, 2, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
+		new Axis(driveStick, 3, 0.5).whenActive(new DSolenoidToggle(Robot.feeder, Robot.feeder.feederSolenoid));
+
+		driveBtn[5].whileHeld(new UseFeeder(Feeder.kInward));
+		driveBtn[4].whileHeld(new UseFeeder(Feeder.kOutward));
+
+		//		new POV(maniStick, 0).whileActive(new UseChainLift(ChainLift.kUpward));
+		//		new POV(maniStick, 180).whileActive(new UseChainLift(ChainLift.kDownward));
+
+		driveBtn[3].whenPressed(new ResetYaw());
+
+//		maniBtn[5].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kUpward));
+//		maniBtn[3].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kDownward));
+
+		maniBtn[4].whileHeld(new UseChainLift(ChainLift.kUpward));
+		maniBtn[2].whileHeld(new UseChainLift(ChainLift.kDownward));
+
+		maniBtn[6].whenPressed(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
+//		maniBtn[10].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid));
+//		maniBtn[11].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid));
+		
 	}
 
 
