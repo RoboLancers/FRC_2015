@@ -68,16 +68,16 @@ public class OI {
 
 		driveBtn[3].whenPressed(new ResetYaw());
 
-//		maniBtn[5].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kUpward));
-//		maniBtn[3].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kDownward));
+		//		maniBtn[5].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kUpward));
+		//		maniBtn[3].whenPressed(new ChainToSetPoint(ChainToSetPoint.TYPE_LEVEL, ChainLift.kDownward));
 
 		maniBtn[4].whileHeld(new UseChainLift(ChainLift.kUpward));
 		maniBtn[2].whileHeld(new UseChainLift(ChainLift.kDownward));
 
 		maniBtn[6].whenPressed(new DSolenoidToggle(Robot.chainLift, Robot.chainLift.liftSolenoid));
-//		maniBtn[10].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid));
-//		maniBtn[11].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid));
-		
+		maniBtn[10].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid));
+		maniBtn[11].whenPressed(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid));
+
 	}
 
 

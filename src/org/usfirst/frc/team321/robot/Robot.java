@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot {
 		feeder = new Feeder();
 		feedback = new Feedback();
 		pneumatics = new Pneumatics();
-		//grabber = new Grabber();
+		grabber = new Grabber();
 		//camera = new Camera();
 
 
@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(chainLift);
 		SmartDashboard.putData(feeder);
-		//SmartDashboard.putData(grabber);
+		SmartDashboard.putData(grabber);
 		//SmartDashboard.putData(camera);
 
 		//Autonomous Chooser in the Smart Dashboard
@@ -81,8 +81,9 @@ public class Robot extends IterativeRobot {
 		autoChooser.addDefault("No Autonomous", null);
 		autoChooser.addObject("Drive Forward LANDFILL", new DriveFacingAngle(0.75, 90, Math.PI/2, 0.8));
 		autoChooser.addObject("Drive Forward CONTAINER", new DriveFacingAngle(0.5, 90, Math.PI/2, 3.05));
+		autoChooser.addObject("TWO (2) CAN STEAL", new TwoCanAuto());
+		
 		//		autoChooser.addObject("VL Tote Strafe NO PICKUP", new NoPickupIRStrafe());
-		//		autoChooser.addObject("TWO (2) CAN STEAL", new TwoCanAuto());
 
 		//		autoChooser.addObject("Container Strafe", new PickUpContainer());
 		//		autoChooser.addObject("3 Tote Autonomous", new ThreeToteAuto());
@@ -139,6 +140,10 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putNumber("Facing Angle", driveTrain.getFacingAngle() * LancerConstants.rad2Deg);
 		SmartDashboard.putBoolean("Chain Lift UP", chainLift.liftSolenoid.get() == Value.kForward ? true : false);
+
+		SmartDashboard.putBoolean("GRABER EXTENDED", grabber.extentionSolenoid.get() == Value.kForward ? true : false);
+		SmartDashboard.putBoolean("GRABBER OUT", grabber.grabSolenoid.get() == Value.kForward ? true : false);
+
 	}
 
 	public void autonomousInit() {

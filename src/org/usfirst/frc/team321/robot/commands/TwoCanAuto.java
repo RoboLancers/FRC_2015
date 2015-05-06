@@ -14,12 +14,13 @@ public class TwoCanAuto extends CommandGroup {
 
 	public  TwoCanAuto() {
 		addParallel(new RegulateCompressor());
-
-		addSequential(new DriveFacingAngle(1.0, 90, 3* Math.PI/2, 0.0375)); //Drive Backwards towards the cans
+		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid, Value.kForward)); //Extend the grabber
+		addSequential(new DriveFacingAngle(0.75, 90, 3* Math.PI/2, 0.04)); //Drive Backwards towards the cans
 		//Extend the down the grabber
-		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid, Value.kForward));
-		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid, Value.kForward));
-		addSequential(new DriveFacingAngle(1.0, 90, Math.PI/2, 0.60375));
+		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid, Value.kForward)); //put down the grabber
+		
+		addSequential(new TimeFiller(1.0));
+		addSequential(new DriveFacingAngle(75, 90, Math.PI/2, 0.840)); //TODO: calculate the dist from step to the autozone
 		//Retract the Grabber
 		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.grabSolenoid, Value.kReverse));
 		addSequential(new DSolenoidToggle(Robot.grabber, Robot.grabber.extentionSolenoid, Value.kReverse));
